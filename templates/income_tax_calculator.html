@@ -4,9 +4,179 @@
 
 {% block content %}
     <a href="{{ url_for('home') }}" class="nav-back">← Back to Home</a>
-    <header>
-        <h1>Income Tax Calculator</h1>
-        <p class="subtitle">This tool is currently under construction.</p>
-    </header>
-    <p style="text-align: center;">Check back soon for a detailed national income tax calculator!</p>
+    
+    <div style="text-align: center;">
+      <div class="lang-toggle">
+        <button id="btn-en" class="active" onclick="toggleLanguage('en')">EN</button>
+        <button id="btn-jp" onclick="toggleLanguage('jp')">JP</button>
+      </div>
+    </div>
+
+    <h1 id="main-title">National Income Tax Calculator</h1>
+    <p class="subtitle" id="subtitle">Estimate your national income tax based on your taxable income.</p>
+
+    <!-- --- TAXABLE INCOME INPUT --- -->
+    <div class="form-group">
+      <div class="label-with-icon">
+        <label for="taxable-income-input" id="label-taxable-income">Your Taxable Income (課税所得) (¥)</label>
+        <i class="info-icon">i</i>
+        <span class="tooltiptext" id="tooltip-taxable-income">Enter your final taxable income amount. This is your gross salary after all deductions (salary, social insurance, basic, dependent, etc.) have been applied.</span>
+      </div>
+      <input type="number" id="taxable-income-input" oninput="calculateIncomeTax()" placeholder="e.g., 3500000">
+    </div>
+
+    <hr>
+    
+    <!-- --- CALCULATION BREAKDOWN --- -->
+    <h2 id="calc-breakdown-title" style="text-align: center; font-weight: 500; color: var(--label-color); margin-bottom: 30px;">Calculation Breakdown</h2>
+
+    <div class="results-grid">
+      <div class="form-group">
+        <div class="label-with-icon">
+          <span class="icon result-icon">📊</span>
+          <label for="tax-rate" id="label-tax-rate">Applicable Tax Rate</label>
+           <i class="info-icon">i</i>
+           <span class="tooltiptext" id="tooltip-tax-rate">The tax rate is determined by which income bracket your taxable income falls into.</span>
+        </div>
+        <input type="text" id="tax-rate" readonly>
+      </div>
+      
+      <div class="form-group">
+        <div class="label-with-icon">
+          <span class="icon deduction-icon">🔻</span>
+          <label for="fixed-deduction" id="label-fixed-deduction">Fixed Deduction (控除額)</label>
+          <i class="info-icon">i</i>
+          <span class="tooltiptext" id="tooltip-fixed-deduction">A fixed amount corresponding to your tax bracket, subtracted after applying the tax rate.</span>
+        </div>
+        <input type="text" id="fixed-deduction" readonly>
+      </div>
+    </div>
+
+    <!-- --- FINAL TAX ESTIMATE --- -->
+    <div class="form-group">
+        <div class="label-with-icon">
+          <span class="icon result-icon">🧾</span>
+          <label for="total-income-tax" id="label-total-tax">Total Estimated Annual Income Tax (所得税)</label>
+          <i class="info-icon">i</i>
+          <span class="tooltiptext" id="tooltip-total-tax">The final calculated amount. Formula: (Taxable Income × Rate) - Fixed Deduction.</span>
+        </div>
+        <input type="text" id="total-income-tax" readonly style="font-size: 20px; text-align: center; color: var(--success-color);">
+    </div>
+    
+    <!-- START: NEW MONTHLY TAX FIELD -->
+    <div class="form-group">
+        <div class="label-with-icon">
+          <span class="icon result-icon">🗓️</span>
+          <label for="monthly-income-tax" id="label-monthly-tax">Estimated Monthly Income Tax</label>
+          <i class="info-icon">i</i>
+          <span class="tooltiptext" id="tooltip-monthly-tax">The annual income tax amount divided by 12. This is often withheld from your monthly salary.</span>
+        </div>
+        <input type="text" id="monthly-income-tax" readonly>
+    </div>
+    <!-- END: NEW MONTHLY TAX FIELD -->
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const translations = {
+        en: {
+            'main-title': 'National Income Tax Calculator',
+            'subtitle': 'Estimate your national income tax based on your taxable income.',
+            'label-taxable-income': 'Your Taxable Income (課税所得) (¥)',
+            'tooltip-taxable-income': 'Enter your final taxable income amount. This is your gross salary after all deductions (salary, social insurance, basic, dependent, etc.) have been applied.',
+            'calc-breakdown-title': 'Calculation Breakdown',
+            'label-tax-rate': 'Applicable Tax Rate',
+            'tooltip-tax-rate': 'The tax rate is determined by which income bracket your taxable income falls into.',
+            'label-fixed-deduction': 'Fixed Deduction (控除額)',
+            'tooltip-fixed-deduction': 'A fixed amount corresponding to your tax bracket, subtracted after applying the tax rate.',
+            'label-total-tax': 'Total Estimated Annual Income Tax (所得税)',
+            'tooltip-total-tax': 'The final calculated amount. Formula: (Taxable Income × Rate) - Fixed Deduction.',
+            // New Translations
+            'label-monthly-tax': 'Estimated Monthly Income Tax',
+            'tooltip-monthly-tax': 'The annual income tax amount divided by 12. This is often withheld from your monthly salary.'
+        },
+        jp: {
+            'main-title': '所得税シミュレーター',
+            'subtitle': '課税所得を基に、国税である所得税を計算します。',
+            'label-taxable-income': 'あなたの課税所得 (円)',
+            'tooltip-taxable-income': '最終的な課税所得金額を入力してください。これは、給与所得控除、社会保険料控除、基礎控除、扶養控除など、すべての控除が適用された後の金額です。',
+            'calc-breakdown-title': '計算の内訳',
+            'label-tax-rate': '適用税率',
+            'tooltip-tax-rate': 'あなたの課税所得がどの所得区分に該当するかによって税率が決まります。',
+            'label-fixed-deduction': '控除額',
+            'tooltip-fixed-deduction': 'あなたの税率区分に対応する固定額で、税率を適用した後に差し引かれます。',
+            'label-total-tax': '所得税の年間合計（目安）',
+            'tooltip-total-tax': '最終的な計算結果です。計算式: (課税所得 × 税率) - 控除額。',
+            // New Translations
+            'label-monthly-tax': '月々の所得税（目安）',
+            'tooltip-monthly-tax': '年間の所得税額を12で割った金額です。通常、毎月の給与から源泉徴収されます。'
+        }
+    };
+
+    window.toggleLanguage = function(lang) {
+        for (const id in translations[lang]) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.innerHTML = translations[lang][id];
+            }
+        }
+        document.querySelectorAll('.lang-toggle button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`btn-${lang}`).classList.add('active');
+    };
+
+    window.calculateIncomeTax = function() {
+        const taxableIncomeInput = document.getElementById('taxable-income-input');
+        const taxableIncome = parseInt(taxableIncomeInput.value) || 0;
+
+        if (taxableIncome === 0) {
+            clearFields();
+            return;
+        }
+
+        let rate = 0;
+        let deduction = 0;
+
+        if (taxableIncome <= 1950000) { rate = 0.05; deduction = 0; } 
+        else if (taxableIncome <= 3300000) { rate = 0.10; deduction = 97500; } 
+        else if (taxableIncome <= 6950000) { rate = 0.20; deduction = 427500; } 
+        else if (taxableIncome <= 9000000) { rate = 0.23; deduction = 636000; } 
+        else if (taxableIncome <= 18000000) { rate = 0.33; deduction = 1536000; } 
+        else if (taxableIncome <= 40000000) { rate = 0.40; deduction = 2796000; } 
+        else { rate = 0.45; deduction = 4796000; }
+
+        const incomeTax = Math.round((taxableIncome * rate) - deduction);
+        
+        // START: NEW MONTHLY CALCULATION
+        const monthlyIncomeTax = Math.round(incomeTax / 12);
+        // END: NEW MONTHLY CALCULATION
+
+        // Update the UI with formatted values
+        document.getElementById('tax-rate').value = `${rate * 100}%`;
+        document.getElementById('fixed-deduction').value = `¥ ${deduction.toLocaleString()}`;
+        document.getElementById('total-income-tax').value = `¥ ${incomeTax.toLocaleString()}`;
+        // START: NEW UI UPDATE
+        document.getElementById('monthly-income-tax').value = `¥ ${monthlyIncomeTax.toLocaleString()}`;
+        // END: NEW UI UPDATE
+    };
+
+    function clearFields() {
+        const idsToClear = [
+            'tax-rate', 
+            'fixed-deduction', 
+            'total-income-tax', 
+            'monthly-income-tax' // Add new field to the clear list
+        ];
+        idsToClear.forEach(id => {
+            document.getElementById(id).value = '';
+        });
+    }
+
+    // Initialize the language and clear fields on load
+    toggleLanguage('en');
+    clearFields();
+});
+</script>
 {% endblock %}

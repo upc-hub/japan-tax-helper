@@ -124,3 +124,28 @@ hr { border: none; border-top: 1px solid #e2e8f0; margin: 40px 0; }
 
 /* --- Footer --- */
 footer { text-align: center; margin-top: 40px; color: #aaa; font-size: 14px; }
+
+/* In static/style.css */
+
+/* --- Monthly Payment Grid for Resident Tax --- */
+.monthly-payment-grid {
+    display: grid;
+    gap: 15px 20px; /* Vertical and horizontal gap */
+    grid-template-columns: repeat(2, 1fr); /* Default to 2 columns */
+}
+
+/* On larger screens, switch to 3 or 4 columns for a more compact view */
+@media (min-width: 600px) {
+    .monthly-payment-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (min-width: 900px) {
+    .monthly-payment-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.monthly-payment-grid .form-group {
+    margin-bottom: 0; /* Remove extra margin as the grid has a gap */
+}
