@@ -10,6 +10,15 @@
     <!-- Link to our central stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>{% block title %}Japan Tax Hub{% endblock %}</title>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TVGLPY3CPG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TVGLPY3CPG');
+</script>
 </head>
 <body>
 
