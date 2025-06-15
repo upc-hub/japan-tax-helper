@@ -2,15 +2,152 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Japan Tax Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 720px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    p {
+      text-align: center;
+      color: #7f8c8d;
+      margin-bottom: 30px;
+    }
+    label {
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 8px;
+      color: #2c3e50;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #fafafa;
+    }
+    input[readonly] {
+      background-color: #e8f0fe;
+      font-weight: bold;
+    }
+    .label-with-icon {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 5px;
+    }
+    .info-icon {
+      font-size: 16px;
+      color: #007bff;
+      cursor: pointer;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .info-icon:hover + .tooltiptext {
+      display: block;
+    }
+    .tooltiptext {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      border-radius: 6px;
+      white-space: normal;
+      width: 280px;
+      text-align: left;
+      font-size: 13px;
+      z-index: 2;
+    }
+    .lang-toggle {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .lang-toggle button {
+      background-color: #ddd;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0 5px;
+    }
+    .lang-toggle button.active {
+      background-color: #007bff;
+      color: white;
+    }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #aaa;
+      font-size: 12px;
+    }
+    @media (max-width: 600px) {
+      .tooltiptext {
+        width: 90%;
+        left: 5%;
+        transform: none;
+      }
+    }
+  </style>
   <script>
-    function updateSalaryInfo() {
-      const monthly = parseInt(document.getElementById("salary").value) || 0;
-      const annual = monthly * 12;
+    let language = 'en';
+    function toggleLanguage(lang) {
+      language = lang;
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.style.display = (lang === 'en') ? 'inline' : 'none';
+      });
+      document.querySelectorAll('[data-jp]').forEach(el => {
+        el.style.display = (lang === 'jp') ? 'inline' : 'none';
+      });
+      document.querySelectorAll('.lang-toggle button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.getElementById(`btn-${lang}`).classList.add('active');
+    }
+
+    function updateInputMode() {
+      const mode = document.getElementById("input-mode").value;
+      document.getElementById("monthly-group").style.display = (mode === 'monthly') ? 'block' : 'none';
+      document.getElementById("annual-group").style.display = (mode === 'annual') ? 'block' : 'none';
+      syncSalaries(mode);
+    }
+
+    function syncSalaries(source) {
+      let monthly = parseInt(document.getElementById("monthly").value) || 0;
+      let annual = parseInt(document.getElementById("annual").value) || 0;
+
+      if (source === 'monthly') {
+        annual = monthly * 12;
+        document.getElementById("annual").value = annual;
+      } else if (source === 'annual') {
+        monthly = Math.round(annual / 12);
+        document.getElementById("monthly").value = monthly;
+      }
 
       let deduction = 0;
-
-      // Salary income deduction logic (2024 rules)
       if (annual <= 1625000) {
         deduction = 550000;
       } else if (annual <= 1800000) {
@@ -25,38 +162,133 @@
         deduction = 1950000;
       }
 
-      document.getElementById("annual-salary").innerText = `¥${annual.toLocaleString()}`;
-      document.getElementById("salary-deduction").innerText = `¥${Math.round(deduction).toLocaleString()}`;
+      const basicDeduction = 430000;
+      const estimatedInsurance = Math.round(annual * 0.15);
+      document.getElementById("social-insurance").value = estimatedInsurance.toLocaleString();
+
+      document.getElementById("result-annual").value = annual.toLocaleString();
+      document.getElementById("result-deduction").value = Math.round(deduction).toLocaleString();
+      document.getElementById("basic-deduction").value = basicDeduction.toLocaleString();
+
+      updateTaxableIncome();
+    }
+
+    function updateTaxableIncome() {
+      let annual = parseInt(document.getElementById("annual").value) || 0;
+      let deduction = parseInt(document.getElementById("result-deduction").value.replace(/,/g, "")) || 0;
+      let insurance = parseInt(document.getElementById("social-insurance").value.replace(/,/g, "")) || 0;
+      let basic = 430000;
+
+      const taxable = annual - deduction - insurance - basic;
+      const incomeBasedTax = taxable > 0 ? Math.round(taxable * 0.1) : 0;
+      const perCapitaTax = 5000;
+      const totalResidentTax = incomeBasedTax + perCapitaTax;
+
+      document.getElementById("taxable-income").value = (taxable > 0 ? taxable.toLocaleString() : 0);
+      document.getElementById("income-tax").value = incomeBasedTax.toLocaleString();
+      document.getElementById("per-capita").value = perCapitaTax.toLocaleString();
+      document.getElementById("total-resident-tax").value = totalResidentTax.toLocaleString();
     }
   </script>
 </head>
-<body style="font-family: Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 0;">
+<body>
+  <div class="container">
+    <h1>Japan Tax Calculator</h1>
+    <p>
+      <span data-en>Simple and visual breakdown of your Japanese tax components</span>
+      <span data-jp style="display:none">日本の税金の仕組みをわかりやすく可視化</span>
+    </p>
 
-  <div style="max-width: 600px; margin: 40px auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-    <h1 style="text-align: center; color: #333333;">Japan Tax Calculator</h1>
-    <p style="text-align: center; color: #666666;">Estimate your income tax based on your gross salary.</p>
+    <div class="lang-toggle">
+      <button id="btn-en" class="active" onclick="toggleLanguage('en')">EN</button>
+      <button id="btn-jp" onclick="toggleLanguage('jp')">JP</button>
+    </div>
 
-    <form method="POST" action="/calculate">
-      <label for="salary" style="display: block; margin-bottom: 8px; font-weight: bold;">Monthly Gross Salary (¥):</label>
-      <input type="number" id="salary" name="salary" required
-             oninput="updateSalaryInfo()"
-             style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #cccccc; border-radius: 6px;">
+    <label for="input-mode">Select Input Type:</label>
+    <select id="input-mode" onchange="updateInputMode()">
+      <option value="monthly">Monthly Gross Salary</option>
+      <option value="annual">Annual Gross Salary</option>
+    </select>
 
-      <div style="margin-bottom: 20px;">
-        <p><strong>Annual Gross Salary:</strong> <span id="annual-salary">¥0</span></p>
-        <p><strong>Salary Income Deduction:</strong> <span id="salary-deduction">¥0</span></p>
+    <div id="monthly-group">
+      <div class="label-with-icon">
+        <label for="monthly">Monthly Gross Salary (¥):</label>
+        <span class="info-icon">ℹ️</span>
+        <div class="tooltiptext">Enter your monthly pre-tax income.</div>
       </div>
+      <input type="number" id="monthly" oninput="syncSalaries('monthly')">
+    </div>
 
-      <button type="submit"
-              style="width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
-        Calculate
-      </button>
-    </form>
+    <div id="annual-group" style="display:none">
+      <div class="label-with-icon">
+        <label for="annual">Annual Gross Salary (¥):</label>
+        <span class="info-icon">ℹ️</span>
+        <div class="tooltiptext">Enter total yearly salary before tax.</div>
+      </div>
+      <input type="number" id="annual" oninput="syncSalaries('annual')">
+    </div>
+
+    <div class="label-with-icon">
+      <label>Calculated Annual Salary:</label>
+      <span class="info-icon">ℹ️</span>
+      <div class="tooltiptext">This is auto-calculated based on monthly/annual input.</div>
+    </div>
+    <input type="text" id="result-annual" readonly>
+
+    <div class="label-with-icon">
+      <label style="color: red;">🔻 Salary Income Deduction:</label>
+      <span class="info-icon">ℹ️</span>
+      <div class="tooltiptext">Standard deduction varies by salary tier.</div>
+    </div>
+    <input type="text" id="result-deduction" readonly>
+
+    <div class="label-with-icon">
+      <label style="color: red;">🔻 Social Insurance Premiums:</label>
+      <span class="info-icon">ℹ️</span>
+      <div class="tooltiptext">Estimated 15% of gross income. Can be customized.</div>
+    </div>
+    <input type="text" id="social-insurance" oninput="updateTaxableIncome()">
+
+    <div class="label-with-icon">
+      <label style="color: red;">🔻 Basic Deduction:</label>
+      <span class="info-icon">ℹ️</span>
+      <div class="tooltiptext">Fixed deduction of ¥430,000.</div>
+    </div>
+    <input type="text" id="basic-deduction" readonly>
+
+    <div class="label-with-icon">
+      <label style="color: green;">💡 Taxable Income:</label>
+      <span class="info-icon">ℹ️</span>
+      <div class="tooltiptext">= Annual income − All deductions.</div>
+    </div>
+    <input type="text" id="taxable-income" readonly>
+
+    <div class="label-with-icon">
+      <label style="color: green;">💰 Income-based Resident Tax (10%):</label>
+      <span class="info-icon">ℹ️</span>
+      <div class="tooltiptext">10% of your taxable income.</div>
+    </div>
+    <input type="text" id="income-tax" readonly>
+
+    <div class="label-with-icon">
+      <label style="color: green;">🏙️ Per Capita Resident Tax:</label>
+      <span class="info-icon">ℹ️</span>
+      <div class="tooltiptext">Usually ¥5,000 (municipal + prefecture).</div>
+    </div>
+    <input type="text" id="per-capita" readonly>
+
+    <div class="label-with-icon">
+      <label style="color: green;">🧾 Total Estimated Resident Tax:</label>
+      <span class="info-icon">ℹ️</span>
+      <div class="tooltiptext">Sum of income-based and per-capita tax.</div>
+    </div>
+    <input type="text" id="total-resident-tax" readonly>
   </div>
 
-  <footer style="text-align: center; margin-top: 20px; color: #999999; font-size: 12px;">
-    &copy; 2025 Japan Tax Helper. For educational use only.
+  <footer>
+    &copy; 2025 Japan Tax Helper (HH). For educational use only.
   </footer>
 
+  <script>toggleLanguage('en');</script>
 </body>
 </html>
