@@ -4,11 +4,12 @@
 
 {% block content %}
 <header>
-    <!-- START: Language Toggle Buttons -->
+    <!-- START: Language Toggle Buttons (with MM added) -->
     <div style="text-align: center; margin-bottom: 20px;">
       <div class="lang-toggle">
         <button id="btn-en" class="active" onclick="toggleLanguage('en')">EN</button>
         <button id="btn-jp" onclick="toggleLanguage('jp')">JP</button>
+        <button id="btn-mm" onclick="toggleLanguage('mm')">MM</button>
       </div>
     </div>
     <!-- END: Language Toggle Buttons -->
@@ -20,25 +21,25 @@
 <div class="card-grid">
     <!-- Card 1: Estimate Resident Tax -->
     <a href="{{ url_for('resident_tax_calculator') }}" class="card">
-        <h3 id="card1-title">1. Estimate Resident Tax</h3>
+        <h3 id="card1-title">【1】Estimate Resident Tax</h3>
         <p id="card1-desc">Use our detailed calculator to estimate your local resident tax (住民税) bill.</p>
-    </a>
-
-    <!-- Card 2: Resident Tax Explained -->
-    <a href="{{ url_for('resident_tax_explanation') }}" class="card">
-        <h3 id="card2-title">2. Resident Tax Explained</h3>
-        <p id="card2-desc">Understand the components of resident tax, including the income-based and per-capita portions.</p>
     </a>
 
     <!-- Card 3: Estimate Income Tax -->
     <a href="{{ url_for('income_tax_calculator') }}" class="card">
-        <h3 id="card3-title">3. Estimate Income Tax</h3>
-        <p id="card3-desc">Calculate your estimated national income tax (所得税) based on your salary. (Tool coming soon)</p>
+        <h3 id="card3-title">【2】Estimate Income Tax</h3>
+        <p id="card3-desc">Calculate your estimated national income tax (所得税) based on your salary.</p>
+    </a>
+
+    <!-- Card 2: Resident Tax Explained -->
+    <a href="{{ url_for('resident_tax_explanation') }}" class="card">
+        <h3 id="card2-title">Resident Tax【1】Explained</h3>
+        <p id="card2-desc">Understand the components of resident tax, including the income-based and per-capita portions.</p>
     </a>
 
     <!-- Card 4: Income Tax Explained -->
     <a href="{{ url_for('income_tax_explanation') }}" class="card">
-        <h3 id="card4-title">4. Income Tax Explained</h3>
+        <h3 id="card4-title">Income Tax【2】Explained</h3>
         <p id="card4-desc">Learn how national income tax is calculated, including its progressive rates and deductions.</p>
     </a>
 </div>
@@ -52,27 +53,41 @@ document.addEventListener('DOMContentLoaded', () => {
         en: {
             'main-title': 'Japan Tax Hub',
             'subtitle': 'Your guide to understanding and estimating taxes in Japan.',
-            'card1-title': '1. Estimate Resident Tax',
+            'card1-title': '【1】Estimate Resident Tax',
             'card1-desc': 'Use our detailed calculator to estimate your local resident tax (住民税) bill.',
-            'card2-title': '2. Resident Tax Explained',
-            'card2-desc': 'Understand the components of resident tax, including the income-based and per-capita portions.',
-            'card3-title': '3. Estimate Income Tax',
+            'card3-title': '【2】Estimate Income Tax',
             'card3-desc': 'Calculate your estimated national income tax (所得税) based on your salary.',
-            'card4-title': '4. Income Tax Explained',
+            'card2-title': 'Resident Tax【1】Explained',
+            'card2-desc': 'Understand the components of resident tax, including the income-based and per-capita portions.',
+            'card4-title': 'Income Tax【2】Explained',
             'card4-desc': 'Learn how national income tax is calculated, including its progressive rates and deductions.'
         },
         jp: {
             'main-title': '日本の税金ハブ',
             'subtitle': '日本の税金を理解し、計算するためのガイドです。',
-            'card1-title': '1. 住民税を計算する',
+            'card1-title': '【1】住民税を計算する',
             'card1-desc': '詳細なシミュレーターを使い、地方税である住民税の概算を計算します。',
-            'card2-title': '2. 住民税の解説',
-            'card2-desc': '所得割と均等割など、住民税の構成要素について理解を深めます。',
-            'card3-title': '3. 所得税を計算する',
+            'card3-title': '【2】所得税を計算する',
             'card3-desc': '給与に基づいて国税である所得税の概算を計算します。',
-            'card4-title': '4. 所得税の解説',
+            'card2-title': '住民税【1】の解説',
+            'card2-desc': '所得割と均等割など、住民税の構成要素について理解を深めます。',
+            'card4-title': '所得税【2】の解説',
             'card4-desc': '累進課税率や各種控除など、所得税の計算方法を学びます。'
+        },
+        // START: NEW MYANMAR TRANSLATIONS
+        mm: {
+            'main-title': 'ဂျပန်အခွန်တွက်ချက်မှုစနစ်',
+            'subtitle': 'ဂျပန်နိုင်ငံ၏ အခွန်များကို နားလည်သဘောပေါက်ပြီး ခန့်မှန်းတွက်ချက်ရန်အတွက် သင်၏လမ်းညွှန်။',
+            'card1-title': '【၁】မြို့နယ်ခွန်/ဒေသခံခွန် တွက်ချက်ရန်',
+            'card1-desc': 'ကျွန်ုပ်တို့၏ အသေးစိတ်ဂဏန်းတွက်စက်ကို အသုံးပြု၍ သင်၏ဒေသခံအခွန် (住民税) ကို ခန့်မှန်းတွက်ချက်ပါ။',
+            'card3-title': '【၂】ဝင်ငွေခွန် တွက်ချက်ရန်',
+            'card3-desc': 'သင်၏လစာအပေါ်မူတည်၍ နိုင်ငံတော်ဝင်ငွေခွန် (所得税) ကို ခန့်မှန်းတွက်ချက်ပါ။',
+            'card2-title': 'မြို့နယ်ခွန်【၁】ရှင်းလင်းချက်',
+            'card2-desc': 'ဝင်ငွေအပေါ်အခြေခံသောအခွန်နှင့် လူတစ်ဦးချင်းစီအတွက်အခွန်တို့ပါဝင်သော ဒေသခံအခွန်၏ ဖွဲ့စည်းပုံကို နားလည်ပါ။',
+            'card4-title': 'ဝင်ငွေခွန်【၂】ရှင်းလင်းချက်',
+            'card4-desc': 'အဆင့်ဆင့်တိုးမြင့်သော အခွန်နှုန်းထားများနှင့် နှုတ်ယူမှုများအပါအဝင် နိုင်ငံတော်ဝင်ငွေခွန်ကို မည်သို့တွက်ချက်သည်ကို လေ့လာပါ။'
         }
+        // END: NEW MYANMAR TRANSLATIONS
     };
 
     // Function to switch language

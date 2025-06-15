@@ -9,6 +9,7 @@
       <div class="lang-toggle">
         <button id="btn-en" class="active" onclick="toggleLanguage('en')">EN</button>
         <button id="btn-jp" onclick="toggleLanguage('jp')">JP</button>
+        <button id="btn-mm" onclick="toggleLanguage('mm')">MM</button>
       </div>
     </div>
 
@@ -16,7 +17,6 @@
     <p class="subtitle" id="subtitle">A simple and visual breakdown of your Japanese resident tax components.</p>
 
     <!-- ... (The entire top part of the calculator remains the same) ... -->
-    <!-- SALARY INPUT -->
     <div class="input-grid">
       <div class="form-group">
         <label for="input-mode" id="label-input-type">Select Input Type:</label>
@@ -27,37 +27,26 @@
       </div>
     </div>
     <div class="input-grid">
-        <div id="monthly-group">
-          <div class="form-group"><div class="label-with-icon"><label for="monthly" id="label-monthly">Monthly Gross Salary (¥)</label></div><input type="number" id="monthly" oninput="syncSalaries('monthly')" placeholder="e.g., 300000"></div>
-        </div>
+        <div id="monthly-group"><div class="form-group"><div class="label-with-icon"><label for="monthly" id="label-monthly">Monthly Gross Salary (¥)</label></div><input type="number" id="monthly" oninput="syncSalaries('monthly')" placeholder="e.g., 300000"></div></div>
         <div id="annual-group" style="display:none;"><div class="form-group"><div class="label-with-icon"><label for="annual" id="label-annual">Annual Gross Salary (¥)</label></div><input type="number" id="annual" oninput="syncSalaries('annual')" placeholder="e.g., 3600000"></div></div>
     </div>
     <hr>
-    <!-- CALCULATION BREAKDOWN -->
     <div class="results-grid">
-      <div class="form-group"><div class="label-with-icon"><label for="result-annual" id="label-calc-annual">Calculated Annual Salary</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-calc-annual">This is your total gross annual salary...</span></div><input type="text" id="result-annual" readonly></div>
-      <div class="form-group"><div class="label-with-icon"><span class="icon deduction-icon">🔻</span><label for="result-deduction" id="label-deduction">Salary Income Deduction</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-deduction">A standard deduction provided to all salaried employees...</span></div><input type="text" id="result-deduction" readonly></div>
-      <div class="form-group"><div class="label-with-icon"><span class="icon deduction-icon">🔻</span><label for="social-insurance" id="label-insurance">Social Insurance Premiums</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-insurance">Estimated at ~15% of gross income...</span></div><input type="text" id="social-insurance" oninput="updateTaxableIncome()"></div>
-      <div class="form-group"><div class="label-with-icon"><span class="icon deduction-icon">🔻</span><label for="basic-deduction" id="label-basic-deduction">Basic Deduction</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-basic-deduction">A fixed deduction of ¥430,000...</span></div><input type="text" id="basic-deduction" readonly></div>
+      <div class="form-group"><div class="label-with-icon"><label for="result-annual" id="label-calc-annual">Calculated Annual Salary</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-calc-annual">...</span></div><input type="text" id="result-annual" readonly></div>
+      <div class="form-group"><div class="label-with-icon"><span class="icon deduction-icon">🔻</span><label for="result-deduction" id="label-deduction">Salary Income Deduction</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-deduction">...</span></div><input type="text" id="result-deduction" readonly></div>
+      <div class="form-group"><div class="label-with-icon"><span class="icon deduction-icon">🔻</span><label for="social-insurance" id="label-insurance">Social Insurance Premiums</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-insurance">...</span></div><input type="text" id="social-insurance" oninput="updateTaxableIncome()"></div>
+      <div class="form-group"><div class="label-with-icon"><span class="icon deduction-icon">🔻</span><label for="basic-deduction" id="label-basic-deduction">Basic Deduction</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-basic-deduction">...</span></div><input type="text" id="basic-deduction" readonly></div>
     </div>
-    <!-- FINAL TAX ESTIMATE -->
-    <div class="form-group"><div class="label-with-icon"><span class="icon result-icon">💡</span><label for="taxable-income" id="label-taxable">Taxable Income</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-taxable">This is the final amount your tax is calculated on...</span></div><input type="text" id="taxable-income" readonly></div>
+    <div class="form-group"><div class="label-with-icon"><span class="icon result-icon">💡</span><label for="taxable-income" id="label-taxable">Taxable Income</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-taxable">...</span></div><input type="text" id="taxable-income" readonly></div>
     <div class="results-grid">
-      <div class="form-group"><div class="label-with-icon"><span class="icon result-icon">💰</span><label for="income-tax" id="label-income-tax">Income-based Resident Tax (10%)</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-income-tax">Calculated as 10% of your taxable income...</span></div><input type="text" id="income-tax" readonly></div>
-      <div class="form-group"><div class="label-with-icon"><span class="icon result-icon">🏙️</span><label for="per-capita" id="label-per-capita">Per Capita Resident Tax</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-per-capita">A small, fixed annual amount...</span></div><input type="text" id="per-capita" readonly></div>
+      <div class="form-group"><div class="label-with-icon"><span class="icon result-icon">💰</span><label for="income-tax" id="label-income-tax">Income-based Resident Tax (10%)</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-income-tax">...</span></div><input type="text" id="income-tax" readonly></div>
+      <div class="form-group"><div class="label-with-icon"><span class="icon result-icon">🏙️</span><label for="per-capita" id="label-per-capita">Per Capita Resident Tax</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-per-capita">...</span></div><input type="text" id="per-capita" readonly></div>
     </div>
-    <div class="form-group"><div class="label-with-icon"><span class="icon result-icon">🧾</span><label for="total-resident-tax" id="label-total-tax">Total Estimated Annual Resident Tax</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-total-tax">The total amount of resident tax...</span></div><input type="text" id="total-resident-tax" readonly style="font-size: 20px; text-align: center; color: var(--success-color);"></div>
-
-    <!-- START: NEW MONTHLY PAYMENT SCHEDULE SECTION -->
+    <div class="form-group"><div class="label-with-icon"><span class="icon result-icon">🧾</span><label for="total-resident-tax" id="label-total-tax">Total Estimated Annual Resident Tax</label><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-total-tax">...</span></div><input type="text" id="total-resident-tax" readonly style="font-size: 20px; text-align: center; color: var(--success-color);"></div>
     <hr>
     <div class="form-group">
-      <div class="label-with-icon">
-          <h2 id="monthly-schedule-title" style="font-size: 1.2em; font-weight: 500; color: var(--label-color); margin: 0;">Monthly Payment Schedule (June - May)</h2>
-          <i class="info-icon">i</i>
-          <span class="tooltiptext" id="tooltip-monthly-schedule">Resident tax is paid in 12 installments from June to May of the following year. The first payment may be slightly higher to account for rounding.</span>
-      </div>
+      <div class="label-with-icon"><h2 id="monthly-schedule-title" style="font-size: 1.2em; font-weight: 500; color: var(--label-color); margin: 0;">Monthly Payment Schedule (June - May)</h2><i class="info-icon">i</i><span class="tooltiptext" id="tooltip-monthly-schedule">...</span></div>
     </div>
-    
     <div class="monthly-payment-grid">
       <div class="form-group"><label for="payment-jun" id="label-jun">June</label><input type="text" id="payment-jun" readonly></div>
       <div class="form-group"><label for="payment-jul" id="label-jul">July</label><input type="text" id="payment-jul" readonly></div>
@@ -72,7 +61,6 @@
       <div class="form-group"><label for="payment-apr" id="label-apr">April</label><input type="text" id="payment-apr" readonly></div>
       <div class="form-group"><label for="payment-may" id="label-may">May</label><input type="text" id="payment-may" readonly></div>
     </div>
-    <!-- END: NEW MONTHLY PAYMENT SCHEDULE SECTION -->
 {% endblock %}
 
 {% block scripts %}
@@ -81,82 +69,56 @@
 
       const translations = {
         en: {
-          // ... (all previous 'en' translations) ...
-          'main-title': 'Resident Tax Calculator', 'subtitle': 'A simple and visual breakdown of your Japanese resident tax components.', 'label-input-type': 'Select Input Type:', 'option-monthly': 'Monthly Gross Salary', 'option-annual': 'Annual Gross Salary', 'label-monthly': 'Monthly Gross Salary (¥)', 'label-annual': 'Annual Gross Salary (¥)', 'label-calc-annual': 'Calculated Annual Salary', 'tooltip-calc-annual': 'This is your total gross annual salary, used as the starting point for all calculations.', 'label-deduction': 'Salary Income Deduction', 'tooltip-deduction': 'A standard deduction provided to all salaried employees. The amount depends on your income level.', 'label-insurance': 'Social Insurance Premiums', 'tooltip-insurance': 'Estimated at ~15% of gross income (health, pension, etc.). You can edit this for a more accurate value.', 'label-basic-deduction': 'Basic Deduction', 'tooltip-basic-deduction': 'A fixed deduction of ¥430,000 applicable to most residents for residence tax calculation.', 'label-taxable': 'Taxable Income', 'tooltip-taxable': 'This is the final amount your tax is calculated on. (Annual Salary - All Deductions).', 'label-income-tax': 'Income-based Resident Tax (10%)', 'tooltip-income-tax': 'Calculated as 10% of your taxable income (6% for municipal, 4% for prefectural).', 'label-per-capita': 'Per Capita Resident Tax', 'tooltip-per-capita': 'A small, fixed annual amount. Typically around ¥5,000.', 'label-total-tax': 'Total Estimated Annual Resident Tax', 'tooltip-total-tax': "The total amount of resident tax you'll likely pay for the year. (Income-based + Per Capita).",
-          // New EN Translations
-          'monthly-schedule-title': 'Monthly Payment Schedule (June - May)',
-          'tooltip-monthly-schedule': 'Resident tax is paid in 12 installments from June to May of the following year. The first payment may be slightly higher to account for rounding.',
-          'label-jun': 'June', 'label-jul': 'July', 'label-aug': 'August', 'label-sep': 'September', 'label-oct': 'October', 'label-nov': 'November', 'label-dec': 'December', 'label-jan': 'January', 'label-feb': 'February', 'label-mar': 'March', 'label-apr': 'April', 'label-may': 'May'
+          'main-title': 'Resident Tax Calculator', 'subtitle': 'A simple and visual breakdown of your Japanese resident tax components.', 'label-input-type': 'Select Input Type:', 'option-monthly': 'Monthly Gross Salary', 'option-annual': 'Annual Gross Salary', 'label-monthly': 'Monthly Gross Salary (¥)', 'label-annual': 'Annual Gross Salary (¥)', 'label-calc-annual': 'Calculated Annual Salary', 'tooltip-calc-annual': 'This is your total gross annual salary, used as the starting point for all calculations.', 'label-deduction': 'Salary Income Deduction', 'tooltip-deduction': 'A standard deduction provided to all salaried employees. The amount depends on your income level.', 'label-insurance': 'Social Insurance Premiums', 'tooltip-insurance': 'Estimated at ~15% of gross income (health, pension, etc.). You can edit this for a more accurate value.', 'label-basic-deduction': 'Basic Deduction', 'tooltip-basic-deduction': 'A fixed deduction of ¥430,000 applicable to most residents for residence tax calculation.', 'label-taxable': 'Taxable Income', 'tooltip-taxable': 'This is the final amount your tax is calculated on. (Annual Salary - All Deductions).', 'label-income-tax': 'Income-based Resident Tax (10%)', 'tooltip-income-tax': 'Calculated as 10% of your taxable income (6% for municipal, 4% for prefectural).', 'label-per-capita': 'Per Capita Resident Tax', 'tooltip-per-capita': 'A small, fixed annual amount. Typically around ¥5,000.', 'label-total-tax': 'Total Estimated Annual Resident Tax', 'tooltip-total-tax': "The total amount of resident tax you'll likely pay for the year. (Income-based + Per Capita).", 'monthly-schedule-title': 'Monthly Payment Schedule (June - May)', 'tooltip-monthly-schedule': 'Resident tax is paid in 12 installments from June to May of the following year. The first payment may be slightly higher to account for rounding.', 'label-jun': 'June', 'label-jul': 'July', 'label-aug': 'August', 'label-sep': 'September', 'label-oct': 'October', 'label-nov': 'November', 'label-dec': 'December', 'label-jan': 'January', 'label-feb': 'February', 'label-mar': 'March', 'label-apr': 'April', 'label-may': 'May'
         },
         jp: {
-          // ... (all previous 'jp' translations) ...
-          'main-title': '住民税シミュレーター', 'subtitle': '日本の税金の仕組みを分かりやすく可視化します。', 'label-input-type': '入力タイプの選択:', 'option-monthly': '月収（グロス）', 'option-annual': '年収（グロス）', 'label-monthly': '月収（グロス）(円)', 'label-annual': '年収（グロス）(円)', 'label-calc-annual': '計算後の年収', 'tooltip-calc-annual': '計算の基点となる、税引前の年間総支給額です。', 'label-deduction': '給与所得控除', 'tooltip-deduction': '給与所得者に適用される標準的な控除です。金額は収入に応じて変動します。', 'label-insurance': '社会保険料控除', 'tooltip-insurance': '年収の約15%と推定（健康保険、年金等）。より正確な値に編集可能です。', 'label-basic-deduction': '基礎控除', 'tooltip-basic-deduction': '住民税計算において、ほとんどの居住者に適用される43万円の定額控除です。', 'label-taxable': '課税所得金額', 'tooltip-taxable': '税金が計算される最終的な金額です。(年収 - 全ての控除)。', 'label-income-tax': '所得割 (10%)', 'tooltip-income-tax': '課税所得の10%で計算されます (市町村民税6% + 都道府県民税4%)。', 'label-per-capita': '均等割', 'tooltip-per-capita': '定額で課される少額の年税。通常5,000円程度です。', 'label-total-tax': '住民税の年間合計（目安）', 'tooltip-total-tax': '年間に支払う住民税の合計額です。(所得割 + 均等割)。',
-          // New JP Translations
-          'monthly-schedule-title': '月々の支払額（6月〜翌年5月）',
-          'tooltip-monthly-schedule': '住民税は、6月から翌年5月までの12回に分けて支払います。初回の支払額は端数調整のため若干高くなることがあります。',
-          'label-jun': '6月', 'label-jul': '7月', 'label-aug': '8月', 'label-sep': '9月', 'label-oct': '10月', 'label-nov': '11月', 'label-dec': '12月', 'label-jan': '1月', 'label-feb': '2月', 'label-mar': '3月', 'label-apr': '4月', 'label-may': '5月'
+          'main-title': '住民税シミュレーター', 'subtitle': '日本の税金の仕組みを分かりやすく可視化します。', 'label-input-type': '入力タイプの選択:', 'option-monthly': '月収（グロス）', 'option-annual': '年収（グロス）', 'label-monthly': '月収（グロス）(円)', 'label-annual': '年収（グロス）(円)', 'label-calc-annual': '計算後の年収', 'tooltip-calc-annual': '計算の基点となる、税引前の年間総支給額です。', 'label-deduction': '給与所得控除', 'tooltip-deduction': '給与所得者に適用される標準的な控除です。金額は収入に応じて変動します。', 'label-insurance': '社会保険料控除', 'tooltip-insurance': '年収の約15%と推定（健康保険、年金等）。より正確な値に編集可能です。', 'label-basic-deduction': '基礎控除', 'tooltip-basic-deduction': '住民税計算において、ほとんどの居住者に適用される43万円の定額控除です。', 'label-taxable': '課税所得金額', 'tooltip-taxable': '税金が計算される最終的な金額です。(年収 - 全ての控除)。', 'label-income-tax': '所得割 (10%)', 'tooltip-income-tax': '課税所得の10%で計算されます (市町村民税6% + 都道府県民税4%)。', 'label-per-capita': '均等割', 'tooltip-per-capita': '定額で課される少額の年税。通常5,000円程度です。', 'label-total-tax': '住民税の年間合計（目安）', 'tooltip-total-tax': '年間に支払う住民税の合計額です。(所得割 + 均等割)。', 'monthly-schedule-title': '月々の支払額（6月〜翌年5月）', 'tooltip-monthly-schedule': '住民税は、6月から翌年5月までの12回に分けて支払います。初回の支払額は端数調整のため若干高くなることがあります。', 'label-jun': '6月', 'label-jul': '7月', 'label-aug': '8月', 'label-sep': '9月', 'label-oct': '10月', 'label-nov': '11月', 'label-dec': '12月', 'label-jan': '1月', 'label-feb': '2月', 'label-mar': '3月', 'label-apr': '4月', 'label-may': '5月'
+        },
+        // START: NEW MYANMAR TRANSLATIONS
+        mm: {
+          'main-title': 'မြို့နယ်ခွန်/ဒေသခံခွန် တွက်ချက်မှုစနစ်',
+          'subtitle': 'သင်၏ဂျပန်နိုင်ငံ မြို့နယ်ခွန် အစိတ်အပိုင်းများကို ရိုးရှင်းစွာ ရှင်းလင်းဖော်ပြထားပါသည်။',
+          'label-input-type': 'ထည့်သွင်းမှုအမျိုးအစား ရွေးချယ်ပါ:',
+          'option-monthly': 'လစဉ် စုစုပေါင်းလစာ',
+          'option-annual': 'နှစ်စဉ် စုစုပေါင်းလစာ',
+          'label-monthly': 'လစဉ် စုစုပေါင်းလစာ (¥)',
+          'label-annual': 'နှစ်စဉ် စုစုပေါင်းလစာ (¥)',
+          'label-calc-annual': 'တွက်ချက်ထားသော နှစ်စဉ်လစာ',
+          'tooltip-calc-annual': 'ဤသည်မှာ တွက်ချက်မှုအားလုံးအတွက် အစပြုသည့် သင်၏စုစုပေါင်းနှစ်စဉ်လစာဖြစ်သည်။',
+          'label-deduction': 'လစာဝင်ငွေ နှုတ်ယူငွေ',
+          'tooltip-deduction': 'လစာစားဝန်ထမ်းအားလုံးအတွက် ပုံသေနှုတ်ယူငွေဖြစ်သည်။ ပမာဏသည် သင်၏ဝင်ငွေအဆင့်ပေါ် မူတည်သည်။',
+          'label-insurance': 'လူမှုဖူလုံရေး အာမခံ ပရီမီယံများ',
+          'tooltip-insurance': 'စုစုပေါင်းဝင်ငွေ၏ ၁၅% ခန့်မှန်းထားသည် (ကျန်းမာရေး၊ ပင်စင် စသည်)။ ပိုမိုတိကျသောတန်ဖိုးအတွက် တည်းဖြတ်နိုင်သည်။',
+          'label-basic-deduction': 'အခြေခံ နှုတ်ယူငွေ',
+          'tooltip-basic-deduction': 'မြို့နယ်ခွန်တွက်ချက်ရာတွင် နေထိုင်သူအများစုအတွက် သတ်မှတ်ထားသော ယန်း ၄၃၀,၀၀၀ နှုတ်ယူငွေဖြစ်သည်။',
+          'label-taxable': 'အခွန်ဆောင်ရန်ဝင်ငွေ',
+          'tooltip-taxable': 'ဤသည်မှာ သင်၏အခွန်ကို တွက်ချက်မည့် နောက်ဆုံးပမာဏဖြစ်သည်။ (နှစ်စဉ်ဝင်ငွေ - နှုတ်ယူငွေအားလုံး)။',
+          'label-income-tax': 'ဝင်ငွေအပေါ်အခြေခံသော မြို့နယ်ခွန် (၁၀%)',
+          'tooltip-income-tax': 'သင်၏အခွန်ဆောင်ရန်ဝင်ငွေ၏ ၁၀% ဖြင့် တွက်ချက်သည်။ (မြို့နယ် ၆% + ခရိုင် ၄%)။',
+          'label-per-capita': 'လူတစ်ဦးချင်းစီအတွက် မြို့နယ်ခွန်',
+          'tooltip-per-capita': 'နှစ်စဉ်သတ်မှတ်ထားသော ပမာဏအနည်းငယ်။ ပုံမှန်အားဖြင့် ယန်း ၅,၀၀၀ ဝန်းကျင်ဖြစ်သည်။',
+          'label-total-tax': 'နှစ်စဉ် ခန့်မှန်း မြို့နယ်ခွန် စုစုပေါင်း',
+          'tooltip-total-tax': 'တစ်နှစ်အတွက် သင်ပေးဆောင်ရမည့် မြို့နယ်ခွန် စုစုပေါင်းပမာဏ။ (ဝင်ငွေအပေါ်အခြေခံသော + လူတစ်ဦးချင်းစီအတွက်)။',
+          'monthly-schedule-title': 'လစဉ် ပေးချေမှုအချိန်ဇယား (ဇွန် - မေ)',
+          'tooltip-monthly-schedule': 'မြို့နယ်ခွန်ကို နောက်နှစ် ဇွန်လမှ မေလအထိ ၁၂ လခွဲ၍ ပေးဆောင်ရသည်။ ပထမလပေးချေမှုသည် အဝိုင်းညှိရန်အတွက် အနည်းငယ်ပိုများနိုင်သည်။',
+          'label-jun': 'ဇွန်လ', 'label-jul': 'ဇူလိုင်လ', 'label-aug': 'ဩဂုတ်လ', 'label-sep': 'စက်တင်ဘာလ', 'label-oct': 'အောက်တိုဘာလ', 'label-nov': 'နိုဝင်ဘာလ', 'label-dec': 'ဒီဇင်ဘာလ', 'label-jan': 'ဇန်နဝါရီလ', 'label-feb': 'ဖေဖော်ဝါရီလ', 'label-mar': 'မတ်လ', 'label-apr': 'ဧပြီလ', 'label-may': 'မေလ'
         }
+        // END: NEW MYANMAR TRANSLATIONS
       };
       
-      // ... (The rest of the script is the same until `updateTaxableIncome` and `clearFields`) ...
       const monthIds = ['jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec', 'jan', 'feb', 'mar', 'apr', 'may'];
-
-      window.toggleLanguage = function(lang) { /* ... same as before ... */ };
-      window.updateInputMode = function() { /* ... same as before ... */ };
-      window.syncSalaries = function(source) { /* ... same as before ... */ };
-
-      window.updateTaxableIncome = function() {
-        let annual = parseInt(document.getElementById("annual").value.replace(/,/g, "")) || 0;
-        if (annual === 0) return;
-
-        let salaryDeduction = parseInt(document.getElementById("result-deduction").value.replace(/[¥, ]/g, "")) || 0;
-        let insurance = parseInt(document.getElementById("social-insurance").value.replace(/[¥, ]/g, "")) || 0;
-        let basic = parseInt(document.getElementById("basic-deduction").value.replace(/[¥, ]/g, "")) || 0;
-
-        const taxable = Math.max(0, annual - salaryDeduction - insurance - basic);
-        const incomeBasedTax = Math.round(taxable * 0.1);
-        const perCapitaTax = 5000;
-        const totalResidentTax = incomeBasedTax + perCapitaTax;
-
-        document.getElementById("taxable-income").value = `¥ ${taxable.toLocaleString()}`;
-        document.getElementById("income-tax").value = `¥ ${incomeBasedTax.toLocaleString()}`;
-        document.getElementById("per-capita").value = `¥ ${perCapitaTax.toLocaleString()}`;
-        document.getElementById("total-resident-tax").value = `¥ ${totalResidentTax.toLocaleString()}`;
-
-        // START: NEW MONTHLY PAYMENT CALCULATION LOGIC
-        if (totalResidentTax > 0) {
-            const baseMonthlyPayment = Math.floor(totalResidentTax / 12);
-            const firstMonthPayment = totalResidentTax - (baseMonthlyPayment * 11);
-
-            document.getElementById('payment-jun').value = `¥ ${firstMonthPayment.toLocaleString()}`;
-            
-            // Set the remaining 11 months to the base payment
-            monthIds.slice(1).forEach(month => {
-                document.getElementById(`payment-${month}`).value = `¥ ${baseMonthlyPayment.toLocaleString()}`;
-            });
-        } else {
-            // Clear monthly fields if total is zero
-            monthIds.forEach(month => {
-                document.getElementById(`payment-${month}`).value = '';
-            });
-        }
-        // END: NEW MONTHLY PAYMENT CALCULATION LOGIC
-      };
-      
-      function clearFields() {
-          const ids = ["result-annual", "result-deduction", "social-insurance", "basic-deduction", "taxable-income", "income-tax", "per-capita", "total-resident-tax"];
-          ids.forEach(id => document.getElementById(id).value = '');
-          // START: NEW LOGIC TO CLEAR MONTHLY FIELDS
-          monthIds.forEach(month => {
-             document.getElementById(`payment-${month}`).value = '';
-          });
-          // END: NEW LOGIC TO CLEAR MONTHLY FIELDS
-      }
-
-      // Initial setup (Copying the logic from your previous file)
       window.toggleLanguage = function(lang) {for (const id in translations[lang]) {const element = document.getElementById(id); if (element) {element.innerHTML = translations[lang][id];}} document.querySelectorAll('.lang-toggle button').forEach(btn => btn.classList.remove('active')); document.getElementById(`btn-${lang}`).classList.add('active');};
       window.updateInputMode = function() {const mode = document.getElementById("input-mode").value; document.getElementById("monthly-group").style.display = (mode === 'monthly') ? 'block' : 'none'; document.getElementById("annual-group").style.display = (mode === 'annual') ? 'block' : 'none'; if (mode === 'monthly') {document.getElementById("annual-group").style.gridColumn = 'auto'; document.getElementById("monthly-group").style.gridColumn = '1 / -1';} else {document.getElementById("monthly-group").style.gridColumn = 'auto'; document.getElementById("annual-group").style.gridColumn = '1 / -1';} syncSalaries(mode);};
       window.syncSalaries = function(source) {let monthly = parseInt(document.getElementById("monthly").value) || 0; let annual = parseInt(document.getElementById("annual").value) || 0; if (source === 'monthly') {annual = monthly * 12; document.getElementById("annual").value = annual > 0 ? annual : '';} else if (source === 'annual') {monthly = Math.round(annual / 12); document.getElementById("monthly").value = monthly > 0 ? monthly : '';} if (annual === 0) { clearFields(); return; } let deduction = 0; if (annual <= 1625000) { deduction = 550000; } else if (annual <= 1800000) { deduction = annual * 0.4 - 100000; } else if (annual <= 3600000) { deduction = annual * 0.3 + 80000; } else if (annual <= 6600000) { deduction = annual * 0.2 + 440000; } else if (annual <= 8500000) { deduction = annual * 0.1 + 1100000; } else { deduction = 1950000; } deduction = Math.round(deduction); const basicDeduction = 430000; const estimatedInsurance = Math.round(annual * 0.15); document.getElementById("social-insurance").value = estimatedInsurance.toLocaleString(); document.getElementById("result-annual").value = `¥ ${annual.toLocaleString()}`; document.getElementById("result-deduction").value = `¥ ${deduction.toLocaleString()}`; document.getElementById("basic-deduction").value = `¥ ${basicDeduction.toLocaleString()}`; updateTaxableIncome();};
+      window.updateTaxableIncome = function() {
+        let annual = parseInt(document.getElementById("annual").value.replace(/,/g, "")) || 0; if (annual === 0) return;
+        let salaryDeduction = parseInt(document.getElementById("result-deduction").value.replace(/[¥, ]/g, "")) || 0; let insurance = parseInt(document.getElementById("social-insurance").value.replace(/[¥, ]/g, "")) || 0; let basic = parseInt(document.getElementById("basic-deduction").value.replace(/[¥, ]/g, "")) || 0;
+        const taxable = Math.max(0, annual - salaryDeduction - insurance - basic); const incomeBasedTax = Math.round(taxable * 0.1); const perCapitaTax = 5000; const totalResidentTax = incomeBasedTax + perCapitaTax;
+        document.getElementById("taxable-income").value = `¥ ${taxable.toLocaleString()}`; document.getElementById("income-tax").value = `¥ ${incomeBasedTax.toLocaleString()}`; document.getElementById("per-capita").value = `¥ ${perCapitaTax.toLocaleString()}`; document.getElementById("total-resident-tax").value = `¥ ${totalResidentTax.toLocaleString()}`;
+        if (totalResidentTax > 0) { const baseMonthlyPayment = Math.floor(totalResidentTax / 12); const firstMonthPayment = totalResidentTax - (baseMonthlyPayment * 11); document.getElementById('payment-jun').value = `¥ ${firstMonthPayment.toLocaleString()}`; monthIds.slice(1).forEach(month => { document.getElementById(`payment-${month}`).value = `¥ ${baseMonthlyPayment.toLocaleString()}`; });
+        } else { monthIds.forEach(month => { document.getElementById(`payment-${month}`).value = ''; }); }
+      };
+      function clearFields() { const ids = ["result-annual", "result-deduction", "social-insurance", "basic-deduction", "taxable-income", "income-tax", "per-capita", "total-resident-tax"]; ids.forEach(id => document.getElementById(id).value = ''); monthIds.forEach(month => { document.getElementById(`payment-${month}`).value = ''; }); }
       updateInputMode();
     });
 </script>

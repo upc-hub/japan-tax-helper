@@ -9,6 +9,7 @@
       <div class="lang-toggle">
         <button id="btn-en" class="active" onclick="toggleLanguage('en')">EN</button>
         <button id="btn-jp" onclick="toggleLanguage('jp')">JP</button>
+        <button id="btn-mm" onclick="toggleLanguage('mm')">MM</button>
       </div>
     </div>
 
@@ -63,7 +64,6 @@
         <input type="text" id="total-income-tax" readonly style="font-size: 20px; text-align: center; color: var(--success-color);">
     </div>
     
-    <!-- START: NEW MONTHLY TAX FIELD -->
     <div class="form-group">
         <div class="label-with-icon">
           <span class="icon result-icon">🗓️</span>
@@ -73,8 +73,6 @@
         </div>
         <input type="text" id="monthly-income-tax" readonly>
     </div>
-    <!-- END: NEW MONTHLY TAX FIELD -->
-
 {% endblock %}
 
 {% block scripts %}
@@ -94,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'tooltip-fixed-deduction': 'A fixed amount corresponding to your tax bracket, subtracted after applying the tax rate.',
             'label-total-tax': 'Total Estimated Annual Income Tax (所得税)',
             'tooltip-total-tax': 'The final calculated amount. Formula: (Taxable Income × Rate) - Fixed Deduction.',
-            // New Translations
             'label-monthly-tax': 'Estimated Monthly Income Tax',
             'tooltip-monthly-tax': 'The annual income tax amount divided by 12. This is often withheld from your monthly salary.'
         },
@@ -110,10 +107,26 @@ document.addEventListener('DOMContentLoaded', () => {
             'tooltip-fixed-deduction': 'あなたの税率区分に対応する固定額で、税率を適用した後に差し引かれます。',
             'label-total-tax': '所得税の年間合計（目安）',
             'tooltip-total-tax': '最終的な計算結果です。計算式: (課税所得 × 税率) - 控除額。',
-            // New Translations
             'label-monthly-tax': '月々の所得税（目安）',
             'tooltip-monthly-tax': '年間の所得税額を12で割った金額です。通常、毎月の給与から源泉徴収されます。'
+        },
+        // START: NEW MYANMAR TRANSLATIONS
+        mm: {
+            'main-title': 'ဝင်ငွေခွန် တွက်ချက်မှုစနစ်',
+            'subtitle': 'သင်၏အခွန်ဆောင်ရန်ဝင်ငွေကို အခြေခံ၍ နိုင်ငံတော်ဝင်ငွေခွန်ကို ခန့်မှန်းတွက်ချက်ပါ။',
+            'label-taxable-income': 'သင်၏ အခွန်ဆောင်ရန်ဝင်ငွေ (課税所得) (¥)',
+            'tooltip-taxable-income': 'နောက်ဆုံးအခွန်ဆောင်ရန်ဝင်ငွေကို ထည့်ပါ။ ၎င်းသည် လစာ၊ လူမှုဖူလုံရေး၊ အခြေခံ၊ မှီခိုသူ စသည်တို့ကို နှုတ်ပြီးနောက် ကျန်ငွေဖြစ်သည်။',
+            'calc-breakdown-title': 'တွက်ချက်မှု အသေးစိတ်',
+            'label-tax-rate': 'သက်ဆိုင်သော အခွန်နှုန်း',
+            'tooltip-tax-rate': 'အခွန်နှုန်းကို သင်၏ဝင်ငွေသည် မည်သည့်ဝင်ငွေအဆင့်တွင် ရှိသည်ကို မူတည်၍ ဆုံးဖြတ်သည်။',
+            'label-fixed-deduction': 'သတ်မှတ် နှုတ်ယူငွေ (控除額)',
+            'tooltip-fixed-deduction': 'သင်၏အခွန်အဆင့်နှင့် သက်ဆိုင်သော သတ်မှတ်ငွေပမာဏဖြစ်ပြီး၊ အခွန်နှုန်းကို အသုံးပြုပြီးနောက် နှုတ်ယူသည်။',
+            'label-total-tax': 'နှစ်စဉ် ခန့်မှန်း ဝင်ငွေခွန် (所得税)',
+            'tooltip-total-tax': 'နောက်ဆုံးတွက်ချက်ရရှိသော ပမာဏ။ ပုံသေနည်း: (အခွန်ဆောင်ရန်ဝင်ငွေ × နှုန်း) - သတ်မှတ်နှုတ်ယူငွေ။',
+            'label-monthly-tax': 'လစဉ် ခန့်မှန်း ဝင်ငွေခွန်',
+            'tooltip-monthly-tax': 'နှစ်စဉ်ဝင်ငွေခွန်ကို ၁၂ ဖြင့် စားထားသော ပမာဏ။ ၎င်းကို သင်၏လစဉ်လစာမှ ဖြတ်တောက်လေ့ရှိသည်။'
         }
+        // END: NEW MYANMAR TRANSLATIONS
     };
 
     window.toggleLanguage = function(lang) {
@@ -148,33 +161,19 @@ document.addEventListener('DOMContentLoaded', () => {
         else { rate = 0.45; deduction = 4796000; }
 
         const incomeTax = Math.round((taxableIncome * rate) - deduction);
-        
-        // START: NEW MONTHLY CALCULATION
         const monthlyIncomeTax = Math.round(incomeTax / 12);
-        // END: NEW MONTHLY CALCULATION
 
-        // Update the UI with formatted values
         document.getElementById('tax-rate').value = `${rate * 100}%`;
         document.getElementById('fixed-deduction').value = `¥ ${deduction.toLocaleString()}`;
         document.getElementById('total-income-tax').value = `¥ ${incomeTax.toLocaleString()}`;
-        // START: NEW UI UPDATE
         document.getElementById('monthly-income-tax').value = `¥ ${monthlyIncomeTax.toLocaleString()}`;
-        // END: NEW UI UPDATE
     };
 
     function clearFields() {
-        const idsToClear = [
-            'tax-rate', 
-            'fixed-deduction', 
-            'total-income-tax', 
-            'monthly-income-tax' // Add new field to the clear list
-        ];
-        idsToClear.forEach(id => {
-            document.getElementById(id).value = '';
-        });
+        const idsToClear = ['tax-rate', 'fixed-deduction', 'total-income-tax', 'monthly-income-tax'];
+        idsToClear.forEach(id => { document.getElementById(id).value = ''; });
     }
 
-    // Initialize the language and clear fields on load
     toggleLanguage('en');
     clearFields();
 });
