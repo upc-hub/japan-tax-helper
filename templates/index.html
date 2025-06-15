@@ -134,6 +134,7 @@
       justify-content: center;
       font-style: normal;
       font-weight: bold;
+      user-select: none; /* Prevents text selection on click */
     }
     .info-icon:hover + .tooltiptext {
       opacity: 1;
@@ -266,7 +267,7 @@
       <div class="form-group">
         <div class="label-with-icon">
           <label for="result-annual" id="label-calc-annual">Calculated Annual Salary</label>
-          <i class="info-icon">ℹ</i>
+          <i class="info-icon">i</i>
           <span class="tooltiptext" id="tooltip-calc-annual">This is your total gross annual salary, used as the starting point for all calculations.</span>
         </div>
         <input type="text" id="result-annual" readonly>
@@ -276,7 +277,7 @@
         <div class="label-with-icon">
           <span class="icon deduction-icon">🔻</span>
           <label for="result-deduction" id="label-deduction">Salary Income Deduction</label>
-          <i class="info-icon">ℹ</i>
+          <i class="info-icon">i</i>
           <span class="tooltiptext" id="tooltip-deduction">A standard deduction provided to all salaried employees. The amount depends on your income level.</span>
         </div>
         <input type="text" id="result-deduction" readonly>
@@ -286,7 +287,7 @@
         <div class="label-with-icon">
           <span class="icon deduction-icon">🔻</span>
           <label for="social-insurance" id="label-insurance">Social Insurance Premiums</label>
-           <i class="info-icon">ℹ</i>
+           <i class="info-icon">i</i>
            <span class="tooltiptext" id="tooltip-insurance">Estimated at ~15% of gross income (health, pension, etc.). You can edit this for a more accurate value.</span>
         </div>
         <input type="text" id="social-insurance" oninput="updateTaxableIncome()">
@@ -296,7 +297,7 @@
         <div class="label-with-icon">
           <span class="icon deduction-icon">🔻</span>
           <label for="basic-deduction" id="label-basic-deduction">Basic Deduction</label>
-          <i class="info-icon">ℹ</i>
+          <i class="info-icon">i</i>
           <span class="tooltiptext" id="tooltip-basic-deduction">A fixed deduction of ¥430,000 applicable to most residents for residence tax calculation.</span>
         </div>
         <input type="text" id="basic-deduction" readonly>
@@ -308,7 +309,7 @@
       <div class="label-with-icon">
         <span class="icon result-icon">💡</span>
         <label for="taxable-income" id="label-taxable">Taxable Income</label>
-        <i class="info-icon">ℹ</i>
+        <i class="info-icon">i</i>
         <span class="tooltiptext" id="tooltip-taxable">This is the final amount your tax is calculated on. (Annual Salary - All Deductions).</span>
       </div>
       <input type="text" id="taxable-income" readonly>
@@ -319,7 +320,7 @@
         <div class="label-with-icon">
           <span class="icon result-icon">💰</span>
           <label for="income-tax" id="label-income-tax">Income-based Resident Tax (10%)</label>
-          <i class="info-icon">ℹ</i>
+          <i class="info-icon">i</i>
           <span class="tooltiptext" id="tooltip-income-tax">Calculated as 10% of your taxable income (6% for municipal, 4% for prefectural).</span>
         </div>
         <input type="text" id="income-tax" readonly>
@@ -329,7 +330,7 @@
         <div class="label-with-icon">
           <span class="icon result-icon">🏙️</span>
           <label for="per-capita" id="label-per-capita">Per Capita Resident Tax</label>
-          <i class="info-icon">ℹ</i>
+          <i class="info-icon">i</i>
           <span class="tooltiptext" id="tooltip-per-capita">A small, fixed annual amount. Typically around ¥5,000.</span>
         </div>
         <input type="text" id="per-capita" readonly>
@@ -340,7 +341,7 @@
         <div class="label-with-icon">
           <span class="icon result-icon">🧾</span>
           <label for="total-resident-tax" id="label-total-tax">Total Estimated Annual Resident Tax</label>
-          <i class="info-icon">ℹ</i>
+          <i class="info-icon">i</i>
           <span class="tooltiptext" id="tooltip-total-tax">The total amount of resident tax you'll likely pay for the year. (Income-based + Per Capita).</span>
         </div>
         <input type="text" id="total-resident-tax" readonly style="font-size: 20px; text-align: center; color: var(--success-color);">
