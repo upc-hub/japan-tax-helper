@@ -3,6 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <title>Japan Tax Calculator</title>
+  <script>
+    function updateSalaryInfo() {
+      const monthly = parseInt(document.getElementById("salary").value) || 0;
+      const annual = monthly * 12;
+
+      let deduction = 0;
+
+      // Salary income deduction logic (2024 rules)
+      if (annual <= 1625000) {
+        deduction = 550000;
+      } else if (annual <= 1800000) {
+        deduction = annual * 0.4 - 100000;
+      } else if (annual <= 3600000) {
+        deduction = annual * 0.3 + 80000;
+      } else if (annual <= 6600000) {
+        deduction = annual * 0.2 + 440000;
+      } else if (annual <= 8500000) {
+        deduction = annual * 0.1 + 1100000;
+      } else {
+        deduction = 1950000;
+      }
+
+      document.getElementById("annual-salary").innerText = `¥${annual.toLocaleString()}`;
+      document.getElementById("salary-deduction").innerText = `¥${Math.round(deduction).toLocaleString()}`;
+    }
+  </script>
 </head>
 <body style="font-family: Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 0;">
 
@@ -13,7 +39,13 @@
     <form method="POST" action="/calculate">
       <label for="salary" style="display: block; margin-bottom: 8px; font-weight: bold;">Monthly Gross Salary (¥):</label>
       <input type="number" id="salary" name="salary" required
-             style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #cccccc; border-radius: 6px;">
+             oninput="updateSalaryInfo()"
+             style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #cccccc; border-radius: 6px;">
+
+      <div style="margin-bottom: 20px;">
+        <p><strong>Annual Gross Salary:</strong> <span id="annual-salary">¥0</span></p>
+        <p><strong>Salary Income Deduction:</strong> <span id="salary-deduction">¥0</span></p>
+      </div>
 
       <button type="submit"
               style="width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
