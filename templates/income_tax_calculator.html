@@ -130,15 +130,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.toggleLanguage = function(lang) {
+        localStorage.setItem('selectedLanguage', lang); // Save choice
         for (const id in translations[lang]) {
             const element = document.getElementById(id);
-            if (element) {
-                element.innerHTML = translations[lang][id];
-            }
+            if (element) { element.innerHTML = translations[lang][id]; }
         }
         document.querySelectorAll('.lang-toggle button').forEach(btn => btn.classList.remove('active'));
         document.getElementById(`btn-${lang}`).classList.add('active');
     };
+
+    const savedLang = localStorage.getItem('selectedLanguage');
 
     window.calculateIncomeTax = function() {
         const taxableIncomeInput = document.getElementById('taxable-income-input');
@@ -174,7 +175,12 @@ document.addEventListener('DOMContentLoaded', () => {
         idsToClear.forEach(id => { document.getElementById(id).value = ''; });
     }
 
-    toggleLanguage('en');
+    // Initialize the page with the saved language
+    if (savedLang) {
+        toggleLanguage(savedLang);
+    } else {
+        toggleLanguage('en');
+    }
     clearFields();
 });
 </script>

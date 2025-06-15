@@ -4,7 +4,6 @@
 
 {% block content %}
 <header>
-    <!-- START: Language Toggle Buttons (with MM added) -->
     <div style="text-align: center; margin-bottom: 20px;">
       <div class="lang-toggle">
         <button id="btn-en" class="active" onclick="toggleLanguage('en')">EN</button>
@@ -12,8 +11,6 @@
         <button id="btn-mm" onclick="toggleLanguage('mm')">MM</button>
       </div>
     </div>
-    <!-- END: Language Toggle Buttons -->
-
     <h1 id="main-title">Japan Tax Hub</h1>
     <p class="subtitle" id="subtitle">Your guide to understanding and estimating taxes in Japan.</p>
 </header>
@@ -25,22 +22,16 @@
         <p id="card1-desc">Use our detailed calculator to estimate your local resident tax (住民税) bill.</p>
     </a>
 
-    <!-- Card 3: Estimate Income Tax -->
+    <!-- Card 2: Estimate Income Tax -->
     <a href="{{ url_for('income_tax_calculator') }}" class="card">
-        <h3 id="card3-title">【2】Estimate Income Tax</h3>
-        <p id="card3-desc">Calculate your estimated national income tax (所得税) based on your salary.</p>
+        <h3 id="card2-title">【2】Estimate Income Tax</h3>
+        <p id="card2-desc">Calculate your estimated national income tax (所得税) based on your salary.</p>
     </a>
 
-    <!-- Card 2: Resident Tax Explained -->
-    <a href="{{ url_for('resident_tax_explanation') }}" class="card">
-        <h3 id="card2-title">Resident Tax【1】Explained</h3>
-        <p id="card2-desc">Understand the components of resident tax, including the income-based and per-capita portions.</p>
-    </a>
-
-    <!-- Card 4: Income Tax Explained -->
-    <a href="{{ url_for('income_tax_explanation') }}" class="card">
-        <h3 id="card4-title">Income Tax【2】Explained</h3>
-        <p id="card4-desc">Learn how national income tax is calculated, including its progressive rates and deductions.</p>
+    <!-- Card 3: Combined Explanations -->
+    <a href="{{ url_for('tax_explanations') }}" class="card">
+        <h3 id="card3-title">【3】Tax Explanations</h3>
+        <p id="card3-desc">Learn the difference between Resident Tax and National Income Tax.</p>
     </a>
 </div>
 {% endblock %}
@@ -48,65 +39,60 @@
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // UPDATED Translations specific to the homepage
+    // UPDATED Translations for the 3-card layout
     const translations = {
         en: {
             'main-title': 'Japan Tax Hub',
             'subtitle': 'Your guide to understanding and estimating taxes in Japan.',
             'card1-title': '【1】Estimate Resident Tax',
             'card1-desc': 'Use our detailed calculator to estimate your local resident tax (住民税) bill.',
-            'card3-title': '【2】Estimate Income Tax',
-            'card3-desc': 'Calculate your estimated national income tax (所得税) based on your salary.',
-            'card2-title': 'Resident Tax【1】Explained',
-            'card2-desc': 'Understand the components of resident tax, including the income-based and per-capita portions.',
-            'card4-title': 'Income Tax【2】Explained',
-            'card4-desc': 'Learn how national income tax is calculated, including its progressive rates and deductions.'
+            'card2-title': '【2】Estimate Income Tax',
+            'card2-desc': 'Calculate your estimated national income tax (所得税) based on your salary.',
+            'card3-title': '【3】Tax Explanations',
+            'card3-desc': 'Learn the difference between Resident Tax and National Income Tax.'
         },
         jp: {
             'main-title': '日本の税金ハブ',
             'subtitle': '日本の税金を理解し、計算するためのガイドです。',
             'card1-title': '【1】住民税を計算する',
             'card1-desc': '詳細なシミュレーターを使い、地方税である住民税の概算を計算します。',
-            'card3-title': '【2】所得税を計算する',
-            'card3-desc': '給与に基づいて国税である所得税の概算を計算します。',
-            'card2-title': '住民税【1】の解説',
-            'card2-desc': '所得割と均等割など、住民税の構成要素について理解を深めます。',
-            'card4-title': '所得税【2】の解説',
-            'card4-desc': '累進課税率や各種控除など、所得税の計算方法を学びます。'
+            'card2-title': '【2】所得税を計算する',
+            'card2-desc': '給与に基づいて国税である所得税の概算を計算します。',
+            'card3-title': '【3】税金の解説',
+            'card3-desc': '住民税と所得税の違いについて学びます。'
         },
-        // START: NEW MYANMAR TRANSLATIONS
         mm: {
             'main-title': 'ဂျပန်အခွန်တွက်ချက်မှုစနစ်',
             'subtitle': 'ဂျပန်နိုင်ငံ၏ အခွန်များကို နားလည်သဘောပေါက်ပြီး ခန့်မှန်းတွက်ချက်ရန်အတွက် သင်၏လမ်းညွှန်။',
             'card1-title': '【၁】မြို့နယ်ခွန်/ဒေသခံခွန် တွက်ချက်ရန်',
             'card1-desc': 'ကျွန်ုပ်တို့၏ အသေးစိတ်ဂဏန်းတွက်စက်ကို အသုံးပြု၍ သင်၏ဒေသခံအခွန် (住民税) ကို ခန့်မှန်းတွက်ချက်ပါ။',
-            'card3-title': '【၂】ဝင်ငွေခွန် တွက်ချက်ရန်',
-            'card3-desc': 'သင်၏လစာအပေါ်မူတည်၍ နိုင်ငံတော်ဝင်ငွေခွန် (所得税) ကို ခန့်မှန်းတွက်ချက်ပါ။',
-            'card2-title': 'မြို့နယ်ခွန်【၁】ရှင်းလင်းချက်',
-            'card2-desc': 'ဝင်ငွေအပေါ်အခြေခံသောအခွန်နှင့် လူတစ်ဦးချင်းစီအတွက်အခွန်တို့ပါဝင်သော ဒေသခံအခွန်၏ ဖွဲ့စည်းပုံကို နားလည်ပါ။',
-            'card4-title': 'ဝင်ငွေခွန်【၂】ရှင်းလင်းချက်',
-            'card4-desc': 'အဆင့်ဆင့်တိုးမြင့်သော အခွန်နှုန်းထားများနှင့် နှုတ်ယူမှုများအပါအဝင် နိုင်ငံတော်ဝင်ငွေခွန်ကို မည်သို့တွက်ချက်သည်ကို လေ့လာပါ။'
+            'card2-title': '【၂】ဝင်ငွေခွန် တွက်ချက်ရန်',
+            'card2-desc': 'သင်၏လစာအပေါ်မူတည်၍ နိုင်ငံတော်ဝင်ငွေခွန် (所得税) ကို ခန့်မှန်းတွက်ချက်ပါ။',
+            'card3-title': '【၃】အခွန် ရှင်းလင်းချက်များ',
+            'card3-desc': 'မြို့နယ်ခွန်နှင့် ဝင်ငွေခွန်တို့၏ ကွာခြားချက်ကို လေ့လာပါ။'
         }
-        // END: NEW MYANMAR TRANSLATIONS
     };
 
-    // Function to switch language
     window.toggleLanguage = function(lang) {
-        // Update text content based on the selected language
+        // 1. Save the choice to localStorage
+        localStorage.setItem('selectedLanguage', lang);
+
+        // 2. Update the text on the current page
         for (const id in translations[lang]) {
             const element = document.getElementById(id);
-            if (element) {
-                element.innerHTML = translations[lang][id];
-            }
+            if (element) { element.innerHTML = translations[lang][id]; }
         }
-
-        // Update the active state of the toggle buttons
         document.querySelectorAll('.lang-toggle button').forEach(btn => btn.classList.remove('active'));
         document.getElementById(`btn-${lang}`).classList.add('active');
     };
 
-    // Set the initial language (optional, defaults to English)
-    toggleLanguage('en');
+    // On page load, check for a saved language and apply it
+    const savedLang = localStorage.getItem('selectedLanguage');
+    if (savedLang) {
+        toggleLanguage(savedLang);
+    } else {
+        toggleLanguage('en'); // Default to English
+    }
 });
 </script>
 {% endblock %}

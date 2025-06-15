@@ -1,0 +1,138 @@
+{% extends "layout.html" %}
+
+{% block title %}Tax Explanations{% endblock %}
+
+{% block content %}
+    <a href="{{ url_for('home') }}" class="nav-back">← Back to Home</a>
+    <header>
+        <h1 id="main-title">Tax Explanations</h1>
+        <p class="subtitle" id="subtitle">Understanding the two main taxes on personal income in Japan.</p>
+    </header>
+
+    <!-- START: DYNAMIC IMAGE SECTION -->
+    <!-- This section now contains only one image card.
+         The image source and caption will be set by JavaScript. -->
+    <div style="max-width: 500px; margin: 0 auto 40px auto;">
+        <div class="image-card">
+          <img id="explanation-image" src="" alt="Tax Explanation Summary">
+          <h4 id="img-caption">Summary</h4>
+        </div>
+    </div>
+    <hr>
+    <!-- END: DYNAMIC IMAGE SECTION -->
+
+    <div class="explanation-section">
+      <h2 id="res-tax-title">【1】Resident Tax (住民税)</h2>
+      <p id="res-tax-p1">Resident Tax is a local tax levied by your prefecture and municipality based on your <strong>previous year's income</strong>.</p>
+      <h4 id="res-tax-h4">Key Components:</h4>
+      <ul>
+          <li id="res-tax-li1"><strong>Income-based Portion (所得割):</strong> A flat rate of 10% on your taxable income after all deductions (6% for municipal, 4% for prefectural).</li>
+          <li id="res-tax-li2"><strong>Per-Capita Portion (均等割):</strong> A small, fixed annual fee. It is typically around ¥5,000.</li>
+      </ul>
+      <p id="res-tax-p2">It's important to note that you pay this tax in the year <em>after</em> you earn the income. For example, tax on your 2024 income is paid in 12 installments from June 2025 to May 2026.</p>
+    </div>
+
+    <hr>
+
+    <div class="explanation-section">
+        <h2 id="inc-tax-title">【2】Income Tax (所得税)</h2>
+        <p id="inc-tax-p1">National Income Tax is a progressive tax levied by the national government on your <strong>current year's income</strong>.</p>
+        <h4 id="inc-tax-h4">Key Features:</h4>
+        <ul>
+            <li id="inc-tax-li1"><strong>Progressive Rates:</strong> The tax rate increases as your income increases, ranging from 5% to 45%.</li>
+            <li id="inc-tax-li2"><strong>Withholding Tax (源泉徴収):</strong> For salaried employees, this tax is usually estimated and deducted directly from your monthly paycheck by your employer.</li>
+            <li id="inc-tax-li3"><strong>Year-End Adjustment (年末調整):</strong> Your employer typically performs a year-end adjustment to finalize your exact tax liability for the year, accounting for various deductions.</li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // START: The translations object now includes image paths and captions
+    const translations = {
+        en: {
+            'image-src': "{{ url_for('static', filename='ENG.png') }}",
+            'img-caption': 'English Summary',
+            'main-title': 'Tax Explanations', 'subtitle': 'Understanding the two main taxes on personal income in Japan.',
+            'res-tax-title': '【1】Resident Tax (住民税)',
+            'res-tax-p1': "Resident Tax is a local tax levied by your prefecture and municipality based on your <strong>previous year's income</strong>.",
+            'res-tax-h4': 'Key Components:',
+            'res-tax-li1': '<strong>Income-based Portion (所得割):</strong> A flat rate of 10% on your taxable income after all deductions (6% for municipal, 4% for prefectural).',
+            'res-tax-li2': '<strong>Per-Capita Portion (均等割):</strong> A small, fixed annual fee. It is typically around ¥5,000.',
+            'res-tax-p2': "It's important to note that you pay this tax in the year <em>after</em> you earn the income. For example, tax on your 2024 income is paid in 12 installments from June 2025 to May 2026.",
+            'inc-tax-title': '【2】Income Tax (所得税)',
+            'inc-tax-p1': "National Income Tax is a progressive tax levied by the national government on your <strong>current year's income</strong>.",
+            'inc-tax-h4': 'Key Features:',
+            'inc-tax-li1': '<strong>Progressive Rates:</strong> The tax rate increases as your income increases, ranging from 5% to 45%.',
+            'inc-tax-li2': '<strong>Withholding Tax (源泉徴収):</strong> For salaried employees, this tax is usually estimated and deducted directly from your monthly paycheck by your employer.',
+            'inc-tax-li3': '<strong>Year-End Adjustment (年末調整):</strong> Your employer typically performs a year-end adjustment to finalize your exact tax liability for the year, accounting for various deductions.'
+        },
+        jp: {
+            'image-src': "{{ url_for('static', filename='JP.png') }}",
+            'img-caption': '日本語の概要',
+            'main-title': '税金の解説', 'subtitle': '日本の個人所得にかかる主な2つの税金の概要',
+            'res-tax-title': '【1】住民税',
+            'res-tax-p1': '住民税は、お住まいの都道府県と市区町村が<strong>前年の所得</strong>に基づいて課税する地方税です。',
+            'res-tax-h4': '主な構成要素：',
+            'res-tax-li1': '<strong>所得割（しょとくわり）：</strong>全ての控除後の課税所得に対して一律10%（市町村民税6%、都道府県民税4%）の税率で課されます。',
+            'res-tax-li2': '<strong>均等割（きんとうわり）：</strong>少額の定額年税で、通常5,000円程度です。',
+            'res-tax-p2': 'この税金は、所得を得た年の<em>翌年</em>に支払うことが重要です。例えば、2024年の所得に対する税金は、2025年6月から2026年5月にかけて12回に分けて支払われます。',
+            'inc-tax-title': '【2】所得税',
+            'inc-tax-p1': '所得税は、国の政府が<strong>現在の年の所得</strong>に対して課税する累進課税の国税です。',
+            'inc-tax-h4': '主な特徴：',
+            'inc-tax-li1': '<strong>累進課税率：</strong>所得が増えるにつれて税率が5%から45%まで上がります。',
+            'inc-tax-li2': '<strong>源泉徴収（げんせんちょうしゅう）：</strong>給与所得者の場合、通常、この税金は雇用主によって毎月の給与から直接天引きされます。',
+            'inc-tax-li3': '<strong>年末調整（ねんまつちょうせい）：</strong>通常、雇用主が年末に最終的な税額を確定させるための調整を行い、各種控除を反映させます。'
+        },
+        mm: {
+            'image-src': "{{ url_for('static', filename='MM.png') }}",
+            'img-caption': 'မြန်မာ အကျဉ်းချုပ်',
+            'main-title': 'အခွန် ရှင်းလင်းချက်များ', 'subtitle': 'ဂျပန်နိုင်ငံ၏ တစ်ဦးချင်းဝင်ငွေခွန်အပေါ် အဓိကကျသော အခွန်နှစ်မျိုးကို နားလည်ခြင်း။',
+            'res-tax-title': '【၁】မြို့နယ်ခွန်/ဒေသခံခွန် (住民税)',
+            'res-tax-p1': 'မြို့နယ်ခွန်/ဒေသခံခွန်သည် သင်၏ <strong>ယခင်နှစ်ဝင်ငွေ</strong>ကို အခြေခံ၍ သင်နေထိုင်ရာ ခရိုင်နှင့် မြို့နယ်မှ ကောက်ခံသော ဒေသဆိုင်ရာအခွန် ဖြစ်ပါသည်။',
+            'res-tax-h4': 'အဓိက အစိတ်အပိုင်းများ:',
+            'res-tax-li1': '<strong>ဝင်ငွေအပေါ်အခြေခံသော အခွန် (所得割):</strong> နှုတ်ယူငွေအားလုံးနှုတ်ပြီးနောက် ကျန်ရှိသော အခွန်ဆောင်ရန်ဝင်ငွေအပေါ် ပုံသေ ၁၀% (မြို့နယ် ၆%၊ ခရိုင် ၄%) နှုန်းဖြင့် ကောက်ခံသည်။',
+            'res-tax-li2': '<strong>လူတစ်ဦးချင်းစီအတွက် အခွန် (均等割):</strong> နှစ်စဉ်သတ်မှတ်ထားသော ပမာဏအနည်းငယ်ဖြစ်ပြီး၊ ပုံမှန်အားဖြင့် ယန်း ၅,၀၀၀ ဝန်းကျင်ဖြစ်သည်။',
+            'res-tax-p2': 'ဤအခွန်ကို ဝင်ငွေရရှိသည့်နှစ်၏ <em>နောက်နှစ်</em>တွင် ပေးဆောင်ရသည်ကို သတိပြုရန် အရေးကြီးသည်။ ဥပမာအားဖြင့်၊ ၂၀၂၄ ခုနှစ်ဝင်ငွေအတွက် အခွန်ကို ၂၀၂၅ ခုနှစ် ဇွန်လမှ ၂၀၂၆ ခုနှစ် မေလအထိ ၁၂ လခွဲ၍ ပေးဆောင်ရသည်။',
+            'inc-tax-title': '【၂】ဝင်ငွေခွန် (所得税)',
+            'inc-tax-p1': 'ဝင်ငွေခွန်သည် နိုင်ငံတော်အစိုးရမှ သင်၏ <strong>လက်ရှိနှစ်ဝင်ငွေ</strong>အပေါ် ကောက်ခံသော အဆင့်ဆင့်တိုးမြင့်သည့် နိုင်ငံတော်အခွန် ဖြစ်သည်။',
+            'inc-tax-h4': 'အဓိက လက္ခဏာများ:',
+            'inc-tax-li1': '<strong>အဆင့်ဆင့်တိုးမြင့်သော နှုန်းထားများ:</strong> ဝင်ငွေတိုးလာသည်နှင့်အမျှ အခွန်နှုန်းသည် ၅% မှ ၄၅% အထိ မြင့်တက်လာသည်။',
+            'inc-tax-li2': '<strong>ကြိုတင်နုတ်ယူသော အခွန် (源泉徴収):</strong> လစာစားဝန်ထမ်းများအတွက် ဤအခွန်ကို အလုပ်ရှင်မှ လစဉ်လစာမှ တိုက်ရိုက်ဖြတ်တောက်လေ့ရှိသည်။',
+            'inc-tax-li3': '<strong>နှစ်ကုန်ပိုင်း ချိန်ညှိခြင်း (年末調整):</strong> အလုပ်ရှင်သည် အများအားဖြင့် နှစ်ကုန်ပိုင်းတွင် သင်၏အခွန်ပမာဏကို အပြီးသတ်ညှိနှိုင်းပြီး အမျိုးမျိုးသော နှုတ်ယူငွေများကို ထည့်သွင်းစဉ်းစားပေးသည်။'
+        }
+    };
+    // (Note: The text for the explanations has been shortened with '...' for brevity here, but you should keep your full text)
+    
+    function setLanguage(lang) {
+        // Translate all text elements
+        for (const id in translations[lang]) {
+            // Skip the image source, we'll handle it separately
+            if (id === 'image-src' || id === 'img-caption') continue;
+            
+            const element = document.getElementById(id);
+            if (element) { element.innerHTML = translations[lang][id]; }
+        }
+
+        // START: DYNAMICALLY SET THE IMAGE AND CAPTION
+        const imgElement = document.getElementById('explanation-image');
+        const captionElement = document.getElementById('img-caption');
+
+        if(imgElement && captionElement) {
+            imgElement.src = translations[lang]['image-src'];
+            imgElement.alt = translations[lang]['img-caption']; // Good for accessibility
+            captionElement.innerHTML = translations[lang]['img-caption'];
+        }
+        // END: DYNAMICALLY SET THE IMAGE AND CAPTION
+    }
+
+    const savedLang = localStorage.getItem('selectedLanguage');
+    if (savedLang && translations[savedLang]) {
+        setLanguage(savedLang);
+    } else {
+        setLanguage('en');
+    }
+});
+</script>
+{% endblock %}

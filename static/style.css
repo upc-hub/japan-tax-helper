@@ -149,3 +149,45 @@ footer { text-align: center; margin-top: 40px; color: #aaa; font-size: 14px; }
 .monthly-payment-grid .form-group {
     margin-bottom: 0; /* Remove extra margin as the grid has a gap */
 }
+
+/* In static/style.css */
+
+/* --- Styles for the combined explanation page --- */
+.explanation-section h2 {
+    color: var(--primary-color);
+    border-bottom: 2px solid #eef2f7;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+.explanation-section ul {
+    padding-left: 25px;
+}
+.explanation-section li {
+    margin-bottom: 12px;
+    line-height: 1.7;
+}
+
+/* In static/style.css */
+
+/* --- Styles for the Explanation Images --- */
+.image-card {
+    background: white;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    border: 1px solid var(--input-border);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+.image-card img {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 8px; /* Slightly rounded corners for the image itself */
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+}
+.image-card h4 {
+    margin: 0;
+    color: var(--label-color);
+    font-weight: 500;
+    font-size: 1em;
+}

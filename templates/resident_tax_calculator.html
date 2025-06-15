@@ -107,7 +107,17 @@
       };
       
       const monthIds = ['jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec', 'jan', 'feb', 'mar', 'apr', 'may'];
-      window.toggleLanguage = function(lang) {for (const id in translations[lang]) {const element = document.getElementById(id); if (element) {element.innerHTML = translations[lang][id];}} document.querySelectorAll('.lang-toggle button').forEach(btn => btn.classList.remove('active')); document.getElementById(`btn-${lang}`).classList.add('active');};
+      window.toggleLanguage = function(lang) {
+        localStorage.setItem('selectedLanguage', lang); // Save choice
+        for (const id in translations[lang]) {
+            const element = document.getElementById(id);
+            if (element) { element.innerHTML = translations[lang][id]; }
+        }
+        document.querySelectorAll('.lang-toggle button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`btn-${lang}`).classList.add('active');
+    };
+
+    const savedLang = localStorage.getItem('selectedLanguage');
       window.updateInputMode = function() {const mode = document.getElementById("input-mode").value; document.getElementById("monthly-group").style.display = (mode === 'monthly') ? 'block' : 'none'; document.getElementById("annual-group").style.display = (mode === 'annual') ? 'block' : 'none'; if (mode === 'monthly') {document.getElementById("annual-group").style.gridColumn = 'auto'; document.getElementById("monthly-group").style.gridColumn = '1 / -1';} else {document.getElementById("monthly-group").style.gridColumn = 'auto'; document.getElementById("annual-group").style.gridColumn = '1 / -1';} syncSalaries(mode);};
       window.syncSalaries = function(source) {let monthly = parseInt(document.getElementById("monthly").value) || 0; let annual = parseInt(document.getElementById("annual").value) || 0; if (source === 'monthly') {annual = monthly * 12; document.getElementById("annual").value = annual > 0 ? annual : '';} else if (source === 'annual') {monthly = Math.round(annual / 12); document.getElementById("monthly").value = monthly > 0 ? monthly : '';} if (annual === 0) { clearFields(); return; } let deduction = 0; if (annual <= 1625000) { deduction = 550000; } else if (annual <= 1800000) { deduction = annual * 0.4 - 100000; } else if (annual <= 3600000) { deduction = annual * 0.3 + 80000; } else if (annual <= 6600000) { deduction = annual * 0.2 + 440000; } else if (annual <= 8500000) { deduction = annual * 0.1 + 1100000; } else { deduction = 1950000; } deduction = Math.round(deduction); const basicDeduction = 430000; const estimatedInsurance = Math.round(annual * 0.15); document.getElementById("social-insurance").value = estimatedInsurance.toLocaleString(); document.getElementById("result-annual").value = `¥ ${annual.toLocaleString()}`; document.getElementById("result-deduction").value = `¥ ${deduction.toLocaleString()}`; document.getElementById("basic-deduction").value = `¥ ${basicDeduction.toLocaleString()}`; updateTaxableIncome();};
       window.updateTaxableIncome = function() {
@@ -119,6 +129,12 @@
         } else { monthIds.forEach(month => { document.getElementById(`payment-${month}`).value = ''; }); }
       };
       function clearFields() { const ids = ["result-annual", "result-deduction", "social-insurance", "basic-deduction", "taxable-income", "income-tax", "per-capita", "total-resident-tax"]; ids.forEach(id => document.getElementById(id).value = ''); monthIds.forEach(month => { document.getElementById(`payment-${month}`).value = ''; }); }
+      // Initialize the page with the saved language
+      if (savedLang) {
+          toggleLanguage(savedLang);
+      } else {
+          toggleLanguage('en');
+      }
       updateInputMode();
     });
 </script>
