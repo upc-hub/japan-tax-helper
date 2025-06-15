@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+{% block title %}Japan Tax Hub{% endblock %}
+
+{% block content %}
+<header>
+    <!-- START: Language Toggle Buttons -->
+    <div style="text-align: center; margin-bottom: 20px;">
+      <div class="lang-toggle">
+        <button id="btn-en" class="active" onclick="toggleLanguage('en')">EN</button>
+        <button id="btn-jp" onclick="toggleLanguage('jp')">JP</button>
+      </div>
+    </div>
+    <!-- END: Language Toggle Buttons -->
+
+    <h1 id="main-title">Japan Tax Hub</h1>
+    <p class="subtitle" id="subtitle">Your guide to understanding and estimating taxes in Japan.</p>
+</header>
+
+<div class="card-grid">
+    <a href="{{ url_for('income_tax_calculator') }}" class="card">
+        <h3 id="card1-title">1. Estimate Income Tax</h3>
+        <p id="card1-desc">Calculate your estimated national income tax (所得税) based on your salary. (Tool coming soon)</p>
+    </a>
+
+    <a href="{{ url_for('income_tax_explanation') }}" class="card">
+        <h3 id="card2-title">2. Income Tax Explained</h3>
+        <p id="card2-desc">Learn how national income tax is calculated, including its progressive rates and deductions.</p>
+    </a>
+
+    <a href="{{ url_for('resident_tax_calculator') }}" class="card">
+        <h3 id="card3-title">3. Estimate Resident Tax</h3>
+        <p id="card3-desc">Use our detailed calculator to estimate your local resident tax (住民税) bill.</p>
+    </a>
+
+    <a href="{{ url_for('resident_tax_explanation') }}" class="card">
+        <h3 id="card4-title">4. Resident Tax Explained</h3>
+        <p id="card4-desc">Understand the components of resident tax, including the income-based and per-capita portions.</p>
+    </a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Translations specific to the homepage
+    const translations = {
+        en: {
+            'main-title': 'Japan Tax Hub',
+            'subtitle': 'Your guide to understanding and estimating taxes in Japan.',
+            'card1-title': '1. Estimate Income Tax',
+            'card1-desc': 'Calculate your estimated national income tax (所得税) based on your salary. (Tool coming soon)',
+            'card2-title': '2. Income Tax Explained',
+            'card2-desc': 'Learn how national income tax is calculated, including its progressive rates and deductions.',
+            'card3-title': '3. Estimate Resident Tax',
+            'card3-desc': 'Use our detailed calculator to estimate your local resident tax (住民税) bill.',
+            'card4-title': '4. Resident Tax Explained',
+            'card4-desc': 'Understand the components of resident tax, including the income-based and per-capita portions.'
+        },
+        jp: {
+            'main-title': '日本の税金ハブ',
+            'subtitle': '日本の税金を理解し、計算するためのガイドです。',
+            'card1-title': '1. 所得税を計算する',
+            'card1-desc': '給与に基づいて国税である所得税の概算を計算します。(ツールは準備中です)',
+            'card2-title': '2. 所得税の解説',
+            'card2-desc': '累進課税率や各種控除など、所得税の計算方法を学びます。',
+            'card3-title': '3. 住民税を計算する',
+            'card3-desc': '詳細なシミュレーターを使い、地方税である住民税の概算を計算します。',
+            'card4-title': '4. 住民税の解説',
+            'card4-desc': '所得割と均等割など、住民税の構成要素について理解を深めます。'
+        }
+    };
+
+    // Function to switch language
+    window.toggleLanguage = function(lang) {
+        // Update text content based on the selected language
+        for (const id in translations[lang]) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.innerHTML = translations[lang][id];
+            }
+        }
+
+        // Update the active state of the toggle buttons
+        document.querySelectorAll('.lang-toggle button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`btn-${lang}`).classList.add('active');
+    };
+
+    // Set the initial language (optional, defaults to English)
+    toggleLanguage('en');
+});
+</script>
+{% endblock %}

@@ -1,0 +1,286 @@
+{% extends "layout.html" %}
+
+{% block title %}Resident Tax Calculator{% endblock %}
+
+{% block content %}
+    <a href="{{ url_for('home') }}" class="nav-back">← Back to Home</a>
+    
+    <div style="text-align: center;">
+      <div class="lang-toggle">
+        <button id="btn-en" class="active" onclick="toggleLanguage('en')">EN</button>
+        <button id="btn-jp" onclick="toggleLanguage('jp')">JP</button>
+      </div>
+    </div>
+
+    <h1 id="main-title">Resident Tax Calculator</h1>
+    <p class="subtitle" id="subtitle">A simple and visual breakdown of your Japanese resident tax components.</p>
+
+    <!-- The rest of your calculator HTML goes here, exactly as it was -->
+    <!-- SALARY INPUT -->
+    <div class="input-grid">
+      <div class="form-group">
+        <label for="input-mode" id="label-input-type">Select Input Type:</label>
+        <select id="input-mode" onchange="updateInputMode()">
+          <option value="monthly" id="option-monthly">Monthly Gross Salary</option>
+          <option value="annual" id="option-annual">Annual Gross Salary</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="input-grid">
+        <div id="monthly-group">
+          <div class="form-group">
+            <div class="label-with-icon">
+              <label for="monthly" id="label-monthly">Monthly Gross Salary (¥)</label>
+            </div>
+            <input type="number" id="monthly" oninput="syncSalaries('monthly')" placeholder="e.g., 300000">
+          </div>
+        </div>
+
+        <div id="annual-group" style="display:none;">
+          <div class="form-group">
+            <div class="label-with-icon">
+              <label for="annual" id="label-annual">Annual Gross Salary (¥)</label>
+            </div>
+            <input type="number" id="annual" oninput="syncSalaries('annual')" placeholder="e.g., 3600000">
+          </div>
+        </div>
+    </div>
+    
+    <hr>
+    
+    <!-- CALCULATION BREAKDOWN -->
+    <div class="results-grid">
+      <div class="form-group">
+        <div class="label-with-icon">
+          <label for="result-annual" id="label-calc-annual">Calculated Annual Salary</label>
+          <i class="info-icon">i</i>
+          <span class="tooltiptext" id="tooltip-calc-annual">This is your total gross annual salary, used as the starting point for all calculations.</span>
+        </div>
+        <input type="text" id="result-annual" readonly>
+      </div>
+      
+      <div class="form-group">
+        <div class="label-with-icon">
+          <span class="icon deduction-icon">🔻</span>
+          <label for="result-deduction" id="label-deduction">Salary Income Deduction</label>
+          <i class="info-icon">i</i>
+          <span class="tooltiptext" id="tooltip-deduction">A standard deduction provided to all salaried employees. The amount depends on your income level.</span>
+        </div>
+        <input type="text" id="result-deduction" readonly>
+      </div>
+
+      <div class="form-group">
+        <div class="label-with-icon">
+          <span class="icon deduction-icon">🔻</span>
+          <label for="social-insurance" id="label-insurance">Social Insurance Premiums</label>
+           <i class="info-icon">i</i>
+           <span class="tooltiptext" id="tooltip-insurance">Estimated at ~15% of gross income (health, pension, etc.). You can edit this for a more accurate value.</span>
+        </div>
+        <input type="text" id="social-insurance" oninput="updateTaxableIncome()">
+      </div>
+      
+      <div class="form-group">
+        <div class="label-with-icon">
+          <span class="icon deduction-icon">🔻</span>
+          <label for="basic-deduction" id="label-basic-deduction">Basic Deduction</label>
+          <i class="info-icon">i</i>
+          <span class="tooltiptext" id="tooltip-basic-deduction">A fixed deduction of ¥430,000 applicable to most residents for residence tax calculation.</span>
+        </div>
+        <input type="text" id="basic-deduction" readonly>
+      </div>
+    </div>
+
+    <!-- FINAL TAX ESTIMATE -->
+    <div class="form-group">
+      <div class="label-with-icon">
+        <span class="icon result-icon">💡</span>
+        <label for="taxable-income" id="label-taxable">Taxable Income</label>
+        <i class="info-icon">i</i>
+        <span class="tooltiptext" id="tooltip-taxable">This is the final amount your tax is calculated on. (Annual Salary - All Deductions).</span>
+      </div>
+      <input type="text" id="taxable-income" readonly>
+    </div>
+    
+    <div class="results-grid">
+      <div class="form-group">
+        <div class="label-with-icon">
+          <span class="icon result-icon">💰</span>
+          <label for="income-tax" id="label-income-tax">Income-based Resident Tax (10%)</label>
+          <i class="info-icon">i</i>
+          <span class="tooltiptext" id="tooltip-income-tax">Calculated as 10% of your taxable income (6% for municipal, 4% for prefectural).</span>
+        </div>
+        <input type="text" id="income-tax" readonly>
+      </div>
+      
+      <div class="form-group">
+        <div class="label-with-icon">
+          <span class="icon result-icon">🏙️</span>
+          <label for="per-capita" id="label-per-capita">Per Capita Resident Tax</label>
+          <i class="info-icon">i</i>
+          <span class="tooltiptext" id="tooltip-per-capita">A small, fixed annual amount. Typically around ¥5,000.</span>
+        </div>
+        <input type="text" id="per-capita" readonly>
+      </div>
+    </div>
+
+    <div class="form-group">
+        <div class="label-with-icon">
+          <span class="icon result-icon">🧾</span>
+          <label for="total-resident-tax" id="label-total-tax">Total Estimated Annual Resident Tax</label>
+          <i class="info-icon">i</i>
+          <span class="tooltiptext" id="tooltip-total-tax">The total amount of resident tax you'll likely pay for the year. (Income-based + Per Capita).</span>
+        </div>
+        <input type="text" id="total-resident-tax" readonly style="font-size: 20px; text-align: center; color: var(--success-color);">
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Paste your entire JavaScript block here
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const translations = {
+        en: {
+          'main-title': 'Resident Tax Calculator',
+          'subtitle': 'A simple and visual breakdown of your Japanese resident tax components.',
+          'label-input-type': 'Select Input Type:',
+          'option-monthly': 'Monthly Gross Salary',
+          'option-annual': 'Annual Gross Salary',
+          'label-monthly': 'Monthly Gross Salary (¥)',
+          'label-annual': 'Annual Gross Salary (¥)',
+          'label-calc-annual': 'Calculated Annual Salary',
+          'tooltip-calc-annual': 'This is your total gross annual salary, used as the starting point for all calculations.',
+          'label-deduction': 'Salary Income Deduction',
+          'tooltip-deduction': 'A standard deduction provided to all salaried employees. The amount depends on your income level.',
+          'label-insurance': 'Social Insurance Premiums',
+          'tooltip-insurance': 'Estimated at ~15% of gross income (health, pension, etc.). You can edit this for a more accurate value.',
+          'label-basic-deduction': 'Basic Deduction',
+          'tooltip-basic-deduction': 'A fixed deduction of ¥430,000 applicable to most residents for residence tax calculation.',
+          'label-taxable': 'Taxable Income',
+          'tooltip-taxable': 'This is the final amount your tax is calculated on. (Annual Salary - All Deductions).',
+          'label-income-tax': 'Income-based Resident Tax (10%)',
+          'tooltip-income-tax': 'Calculated as 10% of your taxable income (6% for municipal, 4% for prefectural).',
+          'label-per-capita': 'Per Capita Resident Tax',
+          'tooltip-per-capita': 'A small, fixed annual amount. Typically around ¥5,000.',
+          'label-total-tax': 'Total Estimated Annual Resident Tax',
+          'tooltip-total-tax': "The total amount of resident tax you'll likely pay for the year. (Income-based + Per Capita).",
+        },
+        jp: {
+          'main-title': '住民税シミュレーター',
+          'subtitle': '日本の税金の仕組みを分かりやすく可視化します。',
+          'label-input-type': '入力タイプの選択:',
+          'option-monthly': '月収（グロス）',
+          'option-annual': '年収（グロス）',
+          'label-monthly': '月収（グロス）(円)',
+          'label-annual': '年収（グロス）(円)',
+          'label-calc-annual': '計算後の年収',
+          'tooltip-calc-annual': '計算の基点となる、税引前の年間総支給額です。',
+          'label-deduction': '給与所得控除',
+          'tooltip-deduction': '給与所得者に適用される標準的な控除です。金額は収入に応じて変動します。',
+          'label-insurance': '社会保険料控除',
+          'tooltip-insurance': '年収の約15%と推定（健康保険、年金等）。より正確な値に編集可能です。',
+          'label-basic-deduction': '基礎控除',
+          'tooltip-basic-deduction': '住民税計算において、ほとんどの居住者に適用される43万円の定額控除です。',
+          'label-taxable': '課税所得金額',
+          'tooltip-taxable': '税金が計算される最終的な金額です。(年収 - 全ての控除)。',
+          'label-income-tax': '所得割 (10%)',
+          'tooltip-income-tax': '課税所得の10%で計算されます (市町村民税6% + 都道府県民税4%)。',
+          'label-per-capita': '均等割',
+          'tooltip-per-capita': '定額で課される少額の年税。通常5,000円程度です。',
+          'label-total-tax': '住民税の年間合計（目安）',
+          'tooltip-total-tax': '年間に支払う住民税の合計額です。(所得割 + 均等割)。',
+        }
+      };
+
+      window.toggleLanguage = function(lang) {
+        for (const id in translations[lang]) {
+          const element = document.getElementById(id);
+          if (element) {
+            if (element.tagName === 'INPUT' || element.tagName === 'OPTION') {
+              element.textContent = translations[lang][id];
+            } else {
+              element.innerHTML = translations[lang][id];
+            }
+          }
+        }
+        document.querySelectorAll('.lang-toggle button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`btn-${lang}`).classList.add('active');
+      };
+
+      window.updateInputMode = function() {
+        const mode = document.getElementById("input-mode").value;
+        document.getElementById("monthly-group").style.display = (mode === 'monthly') ? 'block' : 'none';
+        document.getElementById("annual-group").style.display = (mode === 'annual') ? 'block' : 'none';
+        if (mode === 'monthly') {
+            document.getElementById("annual-group").style.gridColumn = 'auto';
+            document.getElementById("monthly-group").style.gridColumn = '1 / -1';
+        } else {
+            document.getElementById("monthly-group").style.gridColumn = 'auto';
+            document.getElementById("annual-group").style.gridColumn = '1 / -1';
+        }
+        syncSalaries(mode);
+      };
+
+      window.syncSalaries = function(source) {
+        let monthly = parseInt(document.getElementById("monthly").value) || 0;
+        let annual = parseInt(document.getElementById("annual").value) || 0;
+
+        if (source === 'monthly') {
+          annual = monthly * 12;
+          document.getElementById("annual").value = annual > 0 ? annual : '';
+        } else if (source === 'annual') {
+          monthly = Math.round(annual / 12);
+          document.getElementById("monthly").value = monthly > 0 ? monthly : '';
+        }
+        
+        if (annual === 0) { clearFields(); return; }
+
+        let deduction = 0;
+        if (annual <= 1625000) { deduction = 550000; } 
+        else if (annual <= 1800000) { deduction = annual * 0.4 - 100000; } 
+        else if (annual <= 3600000) { deduction = annual * 0.3 + 80000; } 
+        else if (annual <= 6600000) { deduction = annual * 0.2 + 440000; } 
+        else if (annual <= 8500000) { deduction = annual * 0.1 + 1100000; } 
+        else { deduction = 1950000; }
+        deduction = Math.round(deduction);
+
+        const basicDeduction = 430000;
+        const estimatedInsurance = Math.round(annual * 0.15);
+
+        document.getElementById("social-insurance").value = estimatedInsurance.toLocaleString();
+        document.getElementById("result-annual").value = `¥ ${annual.toLocaleString()}`;
+        document.getElementById("result-deduction").value = `¥ ${deduction.toLocaleString()}`;
+        document.getElementById("basic-deduction").value = `¥ ${basicDeduction.toLocaleString()}`;
+
+        updateTaxableIncome();
+      };
+
+      window.updateTaxableIncome = function() {
+        let annual = parseInt(document.getElementById("annual").value.replace(/,/g, "")) || 0;
+        if (annual === 0) return;
+
+        let salaryDeduction = parseInt(document.getElementById("result-deduction").value.replace(/[¥, ]/g, "")) || 0;
+        let insurance = parseInt(document.getElementById("social-insurance").value.replace(/[¥, ]/g, "")) || 0;
+        let basic = parseInt(document.getElementById("basic-deduction").value.replace(/[¥, ]/g, "")) || 0;
+
+        const taxable = Math.max(0, annual - salaryDeduction - insurance - basic);
+        const incomeBasedTax = Math.round(taxable * 0.1);
+        const perCapitaTax = 5000;
+        const totalResidentTax = incomeBasedTax + perCapitaTax;
+
+        document.getElementById("taxable-income").value = `¥ ${taxable.toLocaleString()}`;
+        document.getElementById("income-tax").value = `¥ ${incomeBasedTax.toLocaleString()}`;
+        document.getElementById("per-capita").value = `¥ ${perCapitaTax.toLocaleString()}`;
+        document.getElementById("total-resident-tax").value = `¥ ${totalResidentTax.toLocaleString()}`;
+      };
+      
+      function clearFields() {
+          const ids = ["result-annual", "result-deduction", "social-insurance", "basic-deduction", "taxable-income", "income-tax", "per-capita", "total-resident-tax"];
+          ids.forEach(id => document.getElementById(id).value = '');
+      }
+
+      updateInputMode();
+    });
+</script>
+{% endblock %}
