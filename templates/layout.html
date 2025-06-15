@@ -10,6 +10,13 @@
     <!-- Link to our central stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>{% block title %}Japan Tax Hub{% endblock %}</title>
+    <!-- START: NEW & CORRECT FAVICON LINKS -->
+    <link rel="icon" href="{{ url_for('static', filename='favicons/favicon.ico') }}" sizes="any">
+    <link rel="icon" href="{{ url_for('static', filename='favicons/favicon.svg') }}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicons/apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='favicons/site.webmanifest') }}">
+    <meta name="theme-color" content="#ffffff">
+    <!-- END: NEW & CORRECT FAVICON LINKS -->
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TVGLPY3CPG"></script>
 <script>
